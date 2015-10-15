@@ -12,6 +12,9 @@ public:
     virtual std::shared_ptr<class Scene> CreateScene() const = 0;
     virtual std::shared_ptr<class Sampler> CreateSampler() const = 0;
 
+    // output
+    virtual glm::vec2 GetImageOutputResolution() const;
+
     // Sampling Properties
     virtual int GetSamplesPerPixel() const;
 

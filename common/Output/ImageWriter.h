@@ -4,6 +4,7 @@
 #include "FreeImage.h"
 // Image Writer Class
 // Use the FreeImage library to write an image to a file
+// Assume (0, 0) is the top left of the image.
 class ImageWriter
 {
 public:

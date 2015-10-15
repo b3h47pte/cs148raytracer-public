@@ -15,11 +15,24 @@
 #include "assignment8/Assignment8.h"
 #endif
 
+#include <chrono>
+
 int main(int argc, char** argv)  
 {
     std::unique_ptr<APPLICATION> currentApplication = make_unique<APPLICATION>();
     RayTracer rayTracer(std::move(currentApplication));
+
+    std::cout << "Ray Tracer Start" << std::endl;
+    auto startTime = std::chrono::high_resolution_clock::now();
     rayTracer.Run();
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto totalElapsedTime = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime);
+    std::cout << "Ray Tracer Elapsed Time: " << totalElapsedTime.count() << " seconds" << std::endl;
+
+#ifdef _WIN32
+    int exit = 0;
+    std::cin >> exit;
+#endif
 
     return 0;
 }

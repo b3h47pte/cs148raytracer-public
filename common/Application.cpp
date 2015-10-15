@@ -22,6 +22,11 @@ int Application::GetSamplesPerPixel() const
     return 1;
 }
 
+glm::vec2 Application::GetImageOutputResolution() const
+{
+    return glm::vec2(1280.f, 720.f);
+}
+
 void Application::PerformImagePostprocessing(class ImageWriter&)
 {
 }

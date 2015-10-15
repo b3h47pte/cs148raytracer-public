@@ -5,11 +5,7 @@
 class Camera : public SceneObject
 {
 public:
-    Camera(glm::vec2 inputResolution, float inputFov);
+    Camera();
 
-    glm::vec2 GetResolution() const;
-private:
-    glm::vec2 resolution;
-    float fov;
-    float aspectRatio;
+    virtual std::shared_ptr<class Ray> GenerateRayForNormalizedCoordinates(glm::vec2 coordinate) const = 0;
 };

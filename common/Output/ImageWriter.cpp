@@ -54,11 +54,11 @@ void ImageWriter::CopyHDRToBitmap()
 void ImageWriter::SetFinalPixelColor(glm::vec3 inColor, int inX, int inY)
 {
     RGBQUAD color;
-    color.rgbRed = (BYTE)std::min(inColor[0] * 255.0, 255.0);
-    color.rgbGreen = (BYTE)std::min(inColor[1] * 255.0, 255.0);
-    color.rgbBlue = (BYTE)std::min(inColor[2] * 255.0, 255.0);
+    color.rgbRed = (BYTE)std::max(std::min(inColor[0] * 255.0, 255.0), 0.0);
+    color.rgbGreen = (BYTE)std::max(std::min(inColor[1] * 255.0, 255.0), 0.0);
+    color.rgbBlue = (BYTE)std::max(std::min(inColor[2] * 255.0, 255.0), 0.0);
 
-    FreeImage_SetPixelColor(m_pOutBitmap, inX, inY, &color);
+    FreeImage_SetPixelColor(m_pOutBitmap, inX, mHeight - inY - 1, &color);
 }
 
 // Manual call to save file 

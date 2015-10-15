@@ -3,7 +3,8 @@
 
 std::shared_ptr<Camera> Assignment5::CreateCamera() const
 {
-    return std::make_shared<Camera>(glm::vec2(1280.f, 720.f), 65.f);
+    const glm::vec2 resolution = GetImageOutputResolution();
+    return std::make_shared<PerspectiveCamera>(resolution.y / resolution.x, 65.f);
 }
 
 std::shared_ptr<Scene> Assignment5::CreateScene() const
@@ -19,7 +20,7 @@ std::shared_ptr<class Sampler> Assignment5::CreateSampler() const
 
 int Assignment5::GetSamplesPerPixel() const
 {
-    return 4;
+    return 1;
 }
 
 bool Assignment5::NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleIndex)
