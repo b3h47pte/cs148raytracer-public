@@ -1,0 +1,130 @@
+#include "common/Scene/Geometry/Mesh/MeshObject.h"
+#include "common/Utility/Mesh/Loading/MeshLoader.h"
+#include "common/Scene/Geometry/Primitives/Triangle/Triangle.h"
+#include "common/Scene/Geometry/Primitives/PrimitiveBase.h"
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+#include "assimp/material.h"
+#include "assimp/mesh.h"
+#include "common/Scene/Geometry/Primitives/Primitive.h"
+#include <map>
+
+
+namespace MeshLoader
+{
+
+void LoadFaceIntoPrimitive(const aiFace& face, PrimitiveBase& primitive, std::vector<glm::vec3>& allPosition, std::vector<glm::vec3>& allNormals, std::vector<glm::vec2>& allUV)
+{
+    LoadFaceIntoPrimitive(face.mNumIndices, face.mIndices, primitive, allPosition, allNormals, allUV);
+}
+
+void LoadFaceIntoPrimitive(unsigned int numVertices, unsigned int* indices, PrimitiveBase& primitive, std::vector<glm::vec3>& allPosition, std::vector<glm::vec3>& allNormals, std::vector<glm::vec2>& allUV)
+{
+    assert(numVertices == primitive.GetTotalVertices());
+    for (unsigned int i = 0; i < numVertices; ++i) {
+        primitive.SetVertexPosition(i, allPosition[indices[i]]);
+        primitive.SetVertexNormal(i, allNormals[indices[i]]);
+        primitive.SetVertexUV(i, allUV[indices[i]]);
+    }
+}
+
+std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, std::vector<std::shared_ptr<aiMaterial>>* outputMaterials)
+{
+
+#ifndef ASSET_PATH
+    static_assert(false, "ASSET_PATH is not defined. Check to make sure your projects are setup correctly");
+#endif
+
+    Assimp::Importer importer;
+    importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_LINE | aiPrimitiveType_POINT);
+
+    const std::string completeFilename = std::string(STRINGIFY(ASSET_PATH)) + "/" + filename;
+
+    const aiScene* scene = importer.ReadFile(completeFilename.c_str(),
+            aiProcess_CalcTangentSpace       | 
+            aiProcess_Triangulate            |
+            aiProcess_JoinIdenticalVertices  |
+            aiProcess_FixInfacingNormals |
+            aiProcess_FindInstances |
+            aiProcess_SortByPType);
+    if (!scene) {
+        std::cerr << "ERROR: Assimp failed -- " << importer.GetErrorString() << std::endl;
+        return {};
+    }
+
+    std::vector<std::shared_ptr<aiMaterial>> sceneMaterials;
+    if (outputMaterials) {
+        sceneMaterials.resize(scene->mNumMaterials);
+        for (unsigned int m = 0; m < scene->mNumMaterials; ++m) {
+            aiMaterial* material = scene->mMaterials[m];
+            std::shared_ptr<aiMaterial> dstMaterial = std::make_shared<aiMaterial>();
+            aiMaterial::CopyPropertyList(dstMaterial.get(), material);
+            sceneMaterials[m] = dstMaterial;
+        }
+    }
+
+    std::vector<std::shared_ptr<MeshObject>> loadedMeshes;
+    for (decltype(scene->mNumMeshes) i = 0; i < scene->mNumMeshes; ++i) {
+        const aiMesh* mesh = scene->mMeshes[i];
+        if (!mesh->HasPositions()) {
+            std::cerr << "WARNING: A mesh in " << filename << " does not have positions. Skipping." << std::endl;
+            continue;
+        }
+        std::shared_ptr<MeshObject> newMesh = std::make_shared<MeshObject>();
+
+        auto totalVertices = mesh->mNumVertices;
+        std::vector<glm::vec3> allPosition(totalVertices);
+        std::vector<glm::vec3> allNormals(totalVertices);
+        std::vector<glm::vec2> allUV(totalVertices);
+
+        for (decltype(totalVertices) v = 0; v < totalVertices; ++v) {
+            allPosition[v] = glm::vec3(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z);
+            
+            if (mesh->HasNormals()) {
+                allNormals[v] = glm::vec3(mesh->mNormals[v].x, mesh->mNormals[v].y, mesh->mNormals[v].z);
+            }
+
+            if (mesh->HasTextureCoords(0)) {
+                allUV[v] = glm::vec2(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y);
+            }
+        }
+
+        if (mesh->HasFaces()) {
+            for (decltype(mesh->mNumFaces) f = 0; f < mesh->mNumFaces; ++f) {
+                const aiFace& face =  mesh->mFaces[f];
+                std::shared_ptr<PrimitiveBase> newPrimitive = nullptr;
+                if (face.mNumIndices == 3) {
+                    newPrimitive = std::make_shared<Triangle>();
+                    LoadFaceIntoPrimitive(face, *newPrimitive.get(), allPosition, allNormals, allUV);
+                } else {
+                    std::cerr << "WARNING: Input mesh has an unsupported primitive type. Skipping face with: " << face.mNumIndices << " vertices." << std::endl;
+                    continue;
+                }
+                assert(newPrimitive);
+                newPrimitive->Finalize();
+                newMesh->AddPrimitive(newPrimitive);
+            }
+        } else {
+            // Assume triangles
+            assert(totalVertices % 3 == 0);
+            for (decltype(totalVertices) v = 0; v < totalVertices; v += 3) {
+                std::shared_ptr<PrimitiveBase> newPrimitive = std::make_shared<Triangle>();
+                unsigned int indices[3] = { v, v + 1, v + 2 };
+                LoadFaceIntoPrimitive(3, indices, *newPrimitive.get(), allPosition, allNormals, allUV);
+                assert(newPrimitive);
+                newPrimitive->Finalize();
+                newMesh->AddPrimitive(newPrimitive);
+            }
+        }
+
+        newMesh->Finalize();
+        loadedMeshes.push_back(std::move(newMesh));
+        if (outputMaterials) {
+            outputMaterials->push_back(sceneMaterials[mesh->mMaterialIndex]);
+        }
+    }
+    return loadedMeshes;
+}
+
+}

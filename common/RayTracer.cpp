@@ -19,8 +19,10 @@ void RayTracer::Run()
     std::shared_ptr<Camera> currentCamera = storedApplication->CreateCamera();
     std::shared_ptr<Scene> currentScene = storedApplication->CreateScene();
     std::shared_ptr<Sampler> currentSampler = storedApplication->CreateSampler();
-    std::shared_ptr<Renderer> currentRenderer = std::make_shared<Renderer>(currentScene, currentSampler);
+    std::shared_ptr<Renderer> currentRenderer = storedApplication->CreateRenderer(currentScene, currentSampler);
     assert(currentScene && currentCamera && currentSampler && currentRenderer);
+
+    currentRenderer->InitializeRenderer();
 
     // Scene preprocessing -- generate acceleration structures, etc.
     // After this call, we are guaranteed that the "acceleration" member of the scene and all scene objects within the scene will be non-NULL.

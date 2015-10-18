@@ -1,0 +1,1 @@
+#include "common/Scene/Geometry/Primitives/Triangle/Triangle.h"

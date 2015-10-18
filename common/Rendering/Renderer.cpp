@@ -7,6 +7,10 @@ Renderer::Renderer(std::shared_ptr<Scene> scene, std::shared_ptr<Sampler> sample
 {
 }
 
+Renderer::~Renderer()
+{
+}
+
 glm::vec3 Renderer::ComputeSampleColor(const struct IntersectionState& intersection) const
 {
     return glm::vec3();

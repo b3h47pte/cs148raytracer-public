@@ -11,6 +11,7 @@ public:
     virtual std::shared_ptr<class Camera> CreateCamera() const = 0;
     virtual std::shared_ptr<class Scene> CreateScene() const = 0;
     virtual std::shared_ptr<class Sampler> CreateSampler() const = 0;
+    virtual std::shared_ptr<class Renderer> CreateRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class Sampler> sampler) const = 0;
 
     // output
     virtual glm::vec2 GetImageOutputResolution() const;
