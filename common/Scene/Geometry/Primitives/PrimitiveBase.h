@@ -1,8 +1,9 @@
 #pragma once
 
 #include "common/common.h"
+#include "common/Acceleration/AccelerationNode.h"
 
-class PrimitiveBase
+class PrimitiveBase: public AccelerationNode
 {
 public:
     virtual void SetVertexPosition(int index, glm::vec3 position) = 0;

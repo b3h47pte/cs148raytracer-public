@@ -7,6 +7,10 @@ template<int N>
 class Primitive : public PrimitiveBase, public SceneObject
 {
 public:
+    Primitive()
+    {
+    }
+
     virtual ~Primitive()
     {
     }
@@ -36,9 +40,26 @@ public:
 
     virtual void Finalize()
     {
+        UpdateBoundingBox();
+    }
+
+    virtual Box GetBoundingBox() override
+    {
+        return boundingBox;
     }
 protected:
     std::array<glm::vec3, N> positions;
     std::array<glm::vec3, N> normals;
     std::array<glm::vec2, N> uvs;
+
+    void UpdateBoundingBox()
+    {
+        boundingBox.Reset();
+        for (int i = 0; i < N; ++i) {
+            boundingBox.maxVertex = glm::max(boundingBox.maxVertex, positions[i]);
+            boundingBox.minVertex = glm::min(boundingBox.minVertex, positions[i]);
+        }
+    }
+    Box boundingBox;
+private:
 };

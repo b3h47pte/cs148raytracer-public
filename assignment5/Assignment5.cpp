@@ -4,7 +4,7 @@
 std::shared_ptr<Camera> Assignment5::CreateCamera() const
 {
     const glm::vec2 resolution = GetImageOutputResolution();
-    std::shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(resolution.y / resolution.x, 65.f);
+    std::shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(resolution.x / resolution.y, 65.f);
     camera->SetPosition(glm::vec3(0.f, 0.f, 2.f));
     return camera;
 }
@@ -13,12 +13,10 @@ std::shared_ptr<Scene> Assignment5::CreateScene() const
 {
     std::shared_ptr<Scene> newScene = std::make_shared<Scene>();
 
-    std::vector<std::shared_ptr<MeshObject>> sphereObjects = MeshLoader::LoadMesh("sphere.obj");
+    std::vector<std::shared_ptr<MeshObject>> sphereObjects = MeshLoader::LoadMesh("cube.obj");
     std::shared_ptr<SceneObject> sphereSceneObject = std::make_shared<SceneObject>();
     sphereSceneObject->AddMeshObject(sphereObjects);
-    sphereSceneObject->Finalize();
     newScene->AddSceneObject(sphereSceneObject);
-
     return newScene;
 }
 

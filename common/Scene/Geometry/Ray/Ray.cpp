@@ -15,3 +15,8 @@ glm::vec3 Ray::GetRayDirection() const
 {
     return rayDirection;
 }
+
+float Ray::GetMaxT() const
+{
+    return maxT;
+}

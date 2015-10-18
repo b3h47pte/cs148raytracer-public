@@ -15,8 +15,6 @@
 #include "glm/gtx/quaternion.hpp"
 #include "glm/gtx/string_cast.hpp"
 
-using SceneDataPtr = std::vector<std::shared_ptr<class SceneObject>>*;
-
 const float PI = 3.14159265359f;
 
 

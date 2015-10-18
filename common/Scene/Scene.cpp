@@ -4,6 +4,11 @@
 
 void Scene::GenerateAccelerationData(AccelerationTypes sceneType, AccelerationTypes perObjectType)
 {
+    acceleration = AccelerationGenerator::CreateStructureFromType(sceneType);
+    assert(acceleration);
+    for (size_t i = 0; i < sceneObjects.size(); ++i) {
+        sceneObjects[i]->CreateAccelerationData(perObjectType);
+    }
 }
 
 
@@ -11,8 +16,7 @@ bool Scene::Trace(class Ray* inputRay, IntersectionState* outputIntersection) co
 {
     assert(inputRay);
 
-    bool didIntersect = false;
-
+    bool didIntersect = acceleration->Trace(inputRay, outputIntersection);
     if (outputIntersection != nullptr) {
 
     }
@@ -34,4 +38,13 @@ void Scene::AddLight(std::shared_ptr<Light> light)
         return;
     }
     sceneLights.emplace_back(std::move(light));
+}
+
+void Scene::Finalize()
+{
+    for (size_t i = 0; i < sceneObjects.size(); ++i) {
+        sceneObjects[i]->Finalize();
+    }
+    assert(acceleration);
+    acceleration->Initialize(sceneObjects);
 }

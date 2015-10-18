@@ -3,7 +3,7 @@
 #include "common/Scene/Scene.h"
 #include "common/Scene/Camera/Camera.h"
 #include "common/Scene/Geometry/Ray/Ray.h"
-#include "common/Scene/Intersection/IntersectionState.h"
+#include "common/Intersection/IntersectionState.h"
 #include "common/Sampling/Sampler.h"
 #include "common/Output/ImageWriter.h"
 #include "common/Rendering/Renderer.h"
@@ -27,6 +27,7 @@ void RayTracer::Run()
     // Scene preprocessing -- generate acceleration structures, etc.
     // After this call, we are guaranteed that the "acceleration" member of the scene and all scene objects within the scene will be non-NULL.
     currentScene->GenerateAccelerationData(storedApplication->GetSceneAccelerationType(), storedApplication->GetPerObjectAccelerationType());
+    currentScene->Finalize();
 
     // Prepare for Output
     const glm::vec2 currentResolution = storedApplication->GetImageOutputResolution();
@@ -61,6 +62,7 @@ void RayTracer::Run()
                 glm::vec3 sampleColor;
                 if (didHitScene) {
                     sampleColor = currentRenderer->ComputeSampleColor(rayIntersection);
+                    sampleColor = glm::vec3(1.f, 0.f, 0.f);
                 }
 
                 finalColor += sampleColor;

@@ -5,4 +5,5 @@
 class NaiveAcceleration : public AccelerationStructure
 {
 public:
+    virtual bool Trace(class Ray* inputRay, struct IntersectionState* outputIntersection) const override;
 };

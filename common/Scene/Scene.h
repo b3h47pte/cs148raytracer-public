@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common/common.h"
-#include "common/Scene/Intersection/IntersectionState.h"
+#include "common/Intersection/IntersectionState.h"
 
 enum class AccelerationTypes;
 class Light;
@@ -46,6 +46,8 @@ public:
 
     void AddSceneObject(std::shared_ptr<SceneObject> object);
     void AddLight(std::shared_ptr<Light> light);
+
+    void Finalize();
 private:
     class std::shared_ptr<class AccelerationStructure> acceleration;
 

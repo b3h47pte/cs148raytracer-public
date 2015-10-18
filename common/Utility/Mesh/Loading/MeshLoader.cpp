@@ -102,7 +102,6 @@ std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, s
                     continue;
                 }
                 assert(newPrimitive);
-                newPrimitive->Finalize();
                 newMesh->AddPrimitive(newPrimitive);
             }
         } else {
@@ -113,12 +112,10 @@ std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, s
                 unsigned int indices[3] = { v, v + 1, v + 2 };
                 LoadFaceIntoPrimitive(3, indices, *newPrimitive.get(), allPosition, allNormals, allUV);
                 assert(newPrimitive);
-                newPrimitive->Finalize();
                 newMesh->AddPrimitive(newPrimitive);
             }
         }
 
-        newMesh->Finalize();
         loadedMeshes.push_back(std::move(newMesh));
         if (outputMaterials) {
             outputMaterials->push_back(sceneMaterials[mesh->mMaterialIndex]);

@@ -1,8 +1,9 @@
 #pragma once
 
 #include "common/common.h"
+#include "common/Acceleration/AccelerationCommon.h"
 
-class SceneObject : public std::enable_shared_from_this<SceneObject>
+class SceneObject : public std::enable_shared_from_this<SceneObject>, public AccelerationNode
 {
 public:
     SceneObject();
@@ -35,9 +36,18 @@ public:
 
     virtual void AddMeshObject(std::shared_ptr<class MeshObject> object);
     virtual void AddMeshObject(const std::vector<std::shared_ptr<MeshObject>>& objects);
-    virtual void Finalize() {}
+    virtual void Finalize();
 
+    virtual void CreateAccelerationData(AccelerationTypes perObjectType);
+
+    virtual Box GetBoundingBox()
+    {
+        return boundingBox;
+    }
+
+    virtual bool Trace(class Ray* inputRay, struct IntersectionState* outputIntersection) const override;
 protected:
+    Box boundingBox;
     static const float MINIMUM_SCALE;
 
     virtual void UpdateTransformationMatrix();

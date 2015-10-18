@@ -1,5 +1,7 @@
 #include "common/Scene/SceneObject.h"
 #include "common/Scene/Geometry/Mesh/MeshObject.h"
+#include "common/Scene/Geometry/Ray/Ray.h"
+#include "common/Intersection/IntersectionState.h"
 
 const float SceneObject::MINIMUM_SCALE = 0.01f;
 
@@ -100,4 +102,29 @@ void SceneObject::AddMeshObject(const std::vector<std::shared_ptr<MeshObject>>& 
     for (size_t i = 0; i < objects.size(); ++i) {
         AddMeshObject(objects.at(i));
     }
+}
+
+void SceneObject::CreateAccelerationData(AccelerationTypes perObjectType)
+{
+    acceleration = AccelerationGenerator::CreateStructureFromType(perObjectType);
+    assert(acceleration);
+    for (size_t i = 0; i < childObjects.size(); ++i) {
+        childObjects[i]->CreateAccelerationData(perObjectType);
+    }
+}
+
+void SceneObject::Finalize()
+{
+    boundingBox.Reset();
+    for (size_t i = 0; i < childObjects.size(); ++i) {
+        childObjects[i]->Finalize();
+        boundingBox.IncludeBox(childObjects[i]->GetBoundingBox());
+    }
+    assert(acceleration);
+    acceleration->Initialize(childObjects);
+}
+
+bool SceneObject::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
+{
+    return acceleration->Trace(inputRay, outputIntersection);
 }

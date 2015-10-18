@@ -9,6 +9,8 @@ public:
 
     virtual glm::vec4 GetForwardDirection() const override;
     glm::vec3 GetRayDirection() const;
+
+    float GetMaxT() const;
 private:
     glm::vec3 rayDirection;
     float maxT;
