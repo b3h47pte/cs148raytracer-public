@@ -1,4 +1,5 @@
 #include "common/Scene/SceneObject.h"
+#include "common/Scene/Geometry/Mesh/MeshObject.h"
 
 const float SceneObject::MINIMUM_SCALE = 0.01f;
 
@@ -87,4 +88,16 @@ void SceneObject::AddScale(float inputScale)
     scale += inputScale;
     scale = glm::max(scale, MINIMUM_SCALE);
     UpdateTransformationMatrix();
+}
+
+void SceneObject::AddMeshObject(std::shared_ptr<MeshObject> object)
+{
+    childObjects.emplace_back(std::move(object));
+}
+
+void SceneObject::AddMeshObject(const std::vector<std::shared_ptr<MeshObject>>& objects)
+{
+    for (size_t i = 0; i < objects.size(); ++i) {
+        AddMeshObject(objects.at(i));
+    }
 }

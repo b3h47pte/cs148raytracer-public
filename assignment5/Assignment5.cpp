@@ -12,6 +12,13 @@ std::shared_ptr<Camera> Assignment5::CreateCamera() const
 std::shared_ptr<Scene> Assignment5::CreateScene() const
 {
     std::shared_ptr<Scene> newScene = std::make_shared<Scene>();
+
+    std::vector<std::shared_ptr<MeshObject>> sphereObjects = MeshLoader::LoadMesh("sphere.obj");
+    std::shared_ptr<SceneObject> sphereSceneObject = std::make_shared<SceneObject>();
+    sphereSceneObject->AddMeshObject(sphereObjects);
+    sphereSceneObject->Finalize();
+    newScene->AddSceneObject(sphereSceneObject);
+
     return newScene;
 }
 

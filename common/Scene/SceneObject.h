@@ -33,6 +33,10 @@ public:
     //
     glm::vec4 GetPosition() const { return position; }
 
+    virtual void AddMeshObject(std::shared_ptr<class MeshObject> object);
+    virtual void AddMeshObject(const std::vector<std::shared_ptr<MeshObject>>& objects);
+    virtual void Finalize() {}
+
 protected:
     static const float MINIMUM_SCALE;
 
@@ -44,4 +48,5 @@ protected:
     glm::vec3 scale;
 
     class std::shared_ptr<class AccelerationStructure> acceleration;
+    std::vector<std::shared_ptr<class MeshObject>> childObjects;
 };
