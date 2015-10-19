@@ -6,7 +6,7 @@ void RandomSampler::ResetSamplerState()
 
 float RandomSampler::Sample1D(float rangeMin, float rangeMax)
 {
-    assert(std::abs(rangeMax - rangeMin) >= std::numeric_limits<float>::epsilon());
+    assert(std::abs(rangeMax - rangeMin) >= EPSILON);
     static std::mt19937 gen(randomDevice());
     static std::uniform_real_distribution<> dist(0, 1);
 

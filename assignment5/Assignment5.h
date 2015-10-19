@@ -11,5 +11,7 @@ public:
     virtual std::shared_ptr<class Renderer> CreateRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class Sampler> sampler) const override;
     virtual int GetSamplesPerPixel() const override;
     virtual bool NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleIndex);
+    virtual int GetMaxReflectionBounces() const;
+    virtual int GetMaxRefractionBounces() const;
 private:
 };

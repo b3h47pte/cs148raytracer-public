@@ -7,7 +7,8 @@ template<int N>
 class Primitive : public PrimitiveBase, public SceneObject
 {
 public:
-    Primitive()
+    Primitive(class MeshObject* inputParent):
+        parentMesh(inputParent)
     {
     }
 
@@ -47,6 +48,11 @@ public:
     {
         return boundingBox;
     }
+
+    virtual const class MeshObject* GetParentMeshObject() const override
+    {
+        return parentMesh;
+    }
 protected:
     std::array<glm::vec3, N> positions;
     std::array<glm::vec3, N> normals;
@@ -62,4 +68,5 @@ protected:
     }
     Box boundingBox;
 private:
+    const class MeshObject* parentMesh;
 };

@@ -1,5 +1,11 @@
 #include "common/Scene/Geometry/Ray/Ray.h"
 
+Ray::Ray() :
+    rayDirection(glm::vec3(0.f, 0.f, -1.f)), maxT(std::numeric_limits<float>::max())
+{
+    position = glm::vec4(0.f, 0.f, 0.f, 1.f);
+}
+
 Ray::Ray(glm::vec3 inputPosition, glm::vec3 inputDirection, float inputMaxT):
     rayDirection(glm::normalize(inputDirection)), maxT(inputMaxT)
 {
@@ -19,4 +25,9 @@ glm::vec3 Ray::GetRayDirection() const
 float Ray::GetMaxT() const
 {
     return maxT;
+}
+
+glm::vec3 Ray::GetRayPosition(float t) const
+{
+    return glm::vec3(position) + t * rayDirection;
 }

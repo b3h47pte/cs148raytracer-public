@@ -2,6 +2,11 @@
 #include "common/Scene/Geometry/Ray/Ray.h"
 #include "common/Intersection/IntersectionState.h"
 
+Triangle::Triangle(class MeshObject* inputParent):
+    Primitive<3>(inputParent)
+{
+}
+
 bool Triangle::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
 {
     // Use Moller-Trumbore Intersection (Fast, Minimum Storage Ray/Triangle Intersection)
@@ -10,10 +15,9 @@ bool Triangle::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
     const glm::vec3 edge2 = positions[2] - positions[0];
     const glm::vec3 pvec = glm::cross(inputRay->GetRayDirection(), edge2);
 
-    const float epsilon = 1e-6f;
     float det = glm::dot(edge1, pvec);
 
-    if (det > -epsilon && det < epsilon) {
+    if (det > -EPSILON && det < EPSILON) {
         return false;
     }
 
@@ -32,8 +36,15 @@ bool Triangle::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
     }
 
     const float t = glm::dot(edge2, qvec) * invDet;
-    if (t - inputRay->GetMaxT() > epsilon) {
+    if (t - inputRay->GetMaxT() > EPSILON) {
         return false;
+    }
+
+    if (outputIntersection) {
+        outputIntersection->intersectionRay = *inputRay;
+        outputIntersection->intersectionT = t;
+        outputIntersection->intersectedPrimitive = this;
+        outputIntersection->hasIntersection = true;
     }
 
     return true;

@@ -95,7 +95,7 @@ std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, s
                 const aiFace& face =  mesh->mFaces[f];
                 std::shared_ptr<PrimitiveBase> newPrimitive = nullptr;
                 if (face.mNumIndices == 3) {
-                    newPrimitive = std::make_shared<Triangle>();
+                    newPrimitive = std::make_shared<Triangle>(newMesh.get());
                     LoadFaceIntoPrimitive(face, *newPrimitive.get(), allPosition, allNormals, allUV);
                 } else {
                     std::cerr << "WARNING: Input mesh has an unsupported primitive type. Skipping face with: " << face.mNumIndices << " vertices." << std::endl;
@@ -108,7 +108,7 @@ std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, s
             // Assume triangles
             assert(totalVertices % 3 == 0);
             for (decltype(totalVertices) v = 0; v < totalVertices; v += 3) {
-                std::shared_ptr<PrimitiveBase> newPrimitive = std::make_shared<Triangle>();
+                std::shared_ptr<PrimitiveBase> newPrimitive = std::make_shared<Triangle>(newMesh.get());
                 unsigned int indices[3] = { v, v + 1, v + 2 };
                 LoadFaceIntoPrimitive(3, indices, *newPrimitive.get(), allPosition, allNormals, allUV);
                 assert(newPrimitive);

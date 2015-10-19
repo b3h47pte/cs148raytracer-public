@@ -13,10 +13,17 @@ std::shared_ptr<Scene> Assignment5::CreateScene() const
 {
     std::shared_ptr<Scene> newScene = std::make_shared<Scene>();
 
+    // Objects
     std::vector<std::shared_ptr<MeshObject>> sphereObjects = MeshLoader::LoadMesh("cube.obj");
     std::shared_ptr<SceneObject> sphereSceneObject = std::make_shared<SceneObject>();
     sphereSceneObject->AddMeshObject(sphereObjects);
     newScene->AddSceneObject(sphereSceneObject);
+
+    // Lights
+    std::shared_ptr<Light> pointLight = std::make_shared<PointLight>();
+    pointLight->SetPosition(glm::vec3(10.f, 10.f, 10.f));
+    newScene->AddLight(pointLight);
+
     return newScene;
 }
 
@@ -38,4 +45,14 @@ int Assignment5::GetSamplesPerPixel() const
 bool Assignment5::NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleIndex)
 {
     return true;
+}
+
+int Assignment5::GetMaxReflectionBounces() const
+{
+    return 0;
+}
+
+int Assignment5::GetMaxRefractionBounces() const
+{
+    return 0;
 }

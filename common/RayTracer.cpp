@@ -55,7 +55,7 @@ void RayTracer::Run()
                 std::shared_ptr<Ray> cameraRay = currentCamera->GenerateRayForNormalizedCoordinates(normalizedCoordinates);
                 assert(cameraRay);
 
-                IntersectionState rayIntersection;
+                IntersectionState rayIntersection(storedApplication->GetMaxReflectionBounces(), storedApplication->GetMaxRefractionBounces());
                 bool didHitScene = currentScene->Trace(cameraRay.get(), &rayIntersection);
 
                 // Use the intersection data to compute the BRDF response.
