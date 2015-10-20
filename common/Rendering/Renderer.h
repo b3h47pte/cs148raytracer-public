@@ -10,7 +10,7 @@ public:
 
     virtual void InitializeRenderer() = 0;
     
-    virtual glm::vec3 ComputeSampleColor(const struct IntersectionState& intersection) const = 0;
+    virtual glm::vec3 ComputeSampleColor(const struct IntersectionState& intersection, const class Ray& fromCameraRay) const = 0;
 protected:
     std::shared_ptr<class Scene> storedScene;
     std::shared_ptr<class Sampler> storedSampler;

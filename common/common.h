@@ -16,7 +16,8 @@
 #include "glm/gtx/string_cast.hpp"
 
 const float PI = 3.14159265359f;
-const float EPSILON = 1e-7f;
+const float LARGE_EPSILON = 1e-5f;
+const float SMALL_EPSILON = 1e-7f;
 
 
 #define STRINGIFY_HELPER(x) #x

@@ -22,10 +22,25 @@ void LoadFaceIntoPrimitive(const aiFace& face, PrimitiveBase& primitive, std::ve
 void LoadFaceIntoPrimitive(unsigned int numVertices, unsigned int* indices, PrimitiveBase& primitive, std::vector<glm::vec3>& allPosition, std::vector<glm::vec3>& allNormals, std::vector<glm::vec2>& allUV)
 {
     assert(numVertices == primitive.GetTotalVertices());
+    bool hasNormals = allNormals.size() == allPosition.size();
+    if (!hasNormals) {
+        std::cerr << "WARNING: The mesh you are loading does not have normals specified. Normals will be estimated at runtime." << std::endl;
+    }
+    bool hasUV = allUV.size() == allPosition.size();
+    if (!hasUV) {
+        std::cerr << "WARNING: The mesh you are loading does not have UVs specified. Expect wrong results when using textures." << std::endl;
+    }
+
     for (unsigned int i = 0; i < numVertices; ++i) {
         primitive.SetVertexPosition(i, allPosition[indices[i]]);
-        primitive.SetVertexNormal(i, allNormals[indices[i]]);
-        primitive.SetVertexUV(i, allUV[indices[i]]);
+
+        if (hasNormals) {
+            primitive.SetVertexNormal(i, allNormals[indices[i]]);
+        }
+
+        if (hasUV) {
+            primitive.SetVertexUV(i, allUV[indices[i]]);
+        }
     }
 }
 
@@ -75,8 +90,15 @@ std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, s
 
         auto totalVertices = mesh->mNumVertices;
         std::vector<glm::vec3> allPosition(totalVertices);
-        std::vector<glm::vec3> allNormals(totalVertices);
-        std::vector<glm::vec2> allUV(totalVertices);
+        std::vector<glm::vec3> allNormals;
+        if (mesh->HasNormals()) {
+            allNormals.resize(totalVertices);
+        }
+
+        std::vector<glm::vec2> allUV;
+        if (mesh->HasTextureCoords(0)) {
+            allUV.resize(totalVertices);
+        }
 
         for (decltype(totalVertices) v = 0; v < totalVertices; ++v) {
             allPosition[v] = glm::vec3(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z);

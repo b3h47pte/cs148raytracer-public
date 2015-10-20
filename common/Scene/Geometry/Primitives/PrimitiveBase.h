@@ -12,4 +12,8 @@ public:
     virtual void SetVertexUV(int index, glm::vec2 uv) = 0;
     virtual int GetTotalVertices() const = 0;
     virtual void Finalize() = 0;
+
+    virtual bool HasVertexNormals() const = 0;
+    virtual glm::vec3 GetVertexNormal(int index) const = 0;
+    virtual glm::vec3 GetPrimitiveNormal() const = 0;
 };

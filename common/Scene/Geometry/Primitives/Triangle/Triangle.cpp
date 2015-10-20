@@ -7,6 +7,13 @@ Triangle::Triangle(class MeshObject* inputParent):
 {
 }
 
+glm::vec3 Triangle::GetPrimitiveNormal() const
+{
+    const glm::vec3 edge1 = glm::normalize(positions[1] - positions[0]);
+    const glm::vec3 edge2 = glm::normalize(positions[2] - positions[0]);
+    return glm::normalize(glm::cross(edge1, edge2));
+}
+
 bool Triangle::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
 {
     // Use Moller-Trumbore Intersection (Fast, Minimum Storage Ray/Triangle Intersection)
@@ -17,7 +24,7 @@ bool Triangle::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
 
     float det = glm::dot(edge1, pvec);
 
-    if (det > -EPSILON && det < EPSILON) {
+    if (det > -SMALL_EPSILON && det < SMALL_EPSILON) {
         return false;
     }
 
@@ -36,7 +43,7 @@ bool Triangle::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
     }
 
     const float t = glm::dot(edge2, qvec) * invDet;
-    if (t - inputRay->GetMaxT() > EPSILON) {
+    if (t - inputRay->GetMaxT() > SMALL_EPSILON || t < -SMALL_EPSILON) {
         return false;
     }
 
@@ -45,6 +52,10 @@ bool Triangle::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
         outputIntersection->intersectionT = t;
         outputIntersection->intersectedPrimitive = this;
         outputIntersection->hasIntersection = true;
+
+        outputIntersection->primitiveIntersectionWeights.emplace_back(1.f - u - v);
+        outputIntersection->primitiveIntersectionWeights.emplace_back(u);
+        outputIntersection->primitiveIntersectionWeights.emplace_back(v);
     }
 
     return true;

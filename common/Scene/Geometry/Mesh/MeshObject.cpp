@@ -9,8 +9,8 @@ MeshObject::MeshObject() :
 {
 }
 
-MeshObject::MeshObject(const Material* inputMaterial) :
-    storedMaterial(inputMaterial)
+MeshObject::MeshObject(std::shared_ptr<Material> inputMaterial) :
+    storedMaterial(std::move(inputMaterial))
 {
 }
 
@@ -47,10 +47,10 @@ bool MeshObject::Trace(Ray* inputRay, IntersectionState* outputIntersection) con
 
 const Material* MeshObject::GetMaterial() const
 {
-    return storedMaterial;
+    return storedMaterial.get();
 }
 
-void MeshObject::SetMaterial(const class Material* inputMaterial)
+void MeshObject::SetMaterial(std::shared_ptr<Material> inputMaterial)
 {
-    storedMaterial = inputMaterial;
+    storedMaterial = std::move(inputMaterial);
 }

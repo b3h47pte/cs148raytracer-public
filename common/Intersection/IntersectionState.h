@@ -31,4 +31,10 @@ struct IntersectionState
     Ray intersectionRay;
     float intersectionT;
     bool hasIntersection;
+
+    // One for each vertex
+    std::vector<float> primitiveIntersectionWeights;
+
+    // Utility Functions
+    glm::vec3 ComputeNormal() const;
 };

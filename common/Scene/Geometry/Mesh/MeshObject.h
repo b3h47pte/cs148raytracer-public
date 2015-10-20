@@ -7,7 +7,7 @@ class MeshObject: public std::enable_shared_from_this<MeshObject>, public Accele
 {
 public:
     MeshObject();
-    MeshObject(const class Material* inputMaterial);
+    MeshObject(std::shared_ptr<class Material> inputMaterial);
     virtual ~MeshObject();
     virtual void Finalize();
 
@@ -19,7 +19,7 @@ public:
         return boundingBox;
     }
 
-    virtual void SetMaterial(const class Material* inputMaterial);
+    virtual void SetMaterial(std::shared_ptr<class Material> inputMaterial);
     virtual const class Material* GetMaterial() const;
 
     virtual bool Trace(class Ray* inputRay, struct IntersectionState* outputIntersection) const override;
@@ -30,5 +30,5 @@ protected:
     class std::shared_ptr<class AccelerationStructure> acceleration;
 
 private:
-    const class Material* storedMaterial;
+    std::shared_ptr<class Material> storedMaterial;
 };

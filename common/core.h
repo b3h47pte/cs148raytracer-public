@@ -9,6 +9,7 @@
 #include "common/Scene/Geometry/Mesh/MeshObject.h"
 #include "common/Scene/Lights/Light.h"
 #include "common/Scene/Lights/Point/PointLight.h"
+#include "common/Rendering/Material/BlinnPhong/BlinnPhongMaterial.h"
 #include "common/Utility/Mesh/Loading/MeshLoader.h"
 #include "common/Rendering/Renderer.h"
 #include "common/Rendering/Renderer/Forward/ForwardRenderer.h"

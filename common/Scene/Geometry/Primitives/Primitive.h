@@ -8,7 +8,7 @@ class Primitive : public PrimitiveBase, public SceneObject
 {
 public:
     Primitive(class MeshObject* inputParent):
-        parentMesh(inputParent)
+        parentMesh(inputParent), hasNormals(false), hasUVs(false)
     {
     }
 
@@ -24,14 +24,18 @@ public:
 
     virtual void SetVertexNormal(int index, glm::vec3 normal)
     {
+        // Assume that SetVertexNormal is called IF AND ONLY IF normals are specified.
         assert(index >= 0 && index < N);
         normals[index] = normal;
+        hasNormals = true;
     }
 
     virtual void SetVertexUV(int index, glm::vec2 uv)
     {
+        // Assume that SetVertexUV is called IF AND ONLY IF uv coordinates are specified.
         assert(index >= 0 && index < N);
         uvs[index] = uv;
+        hasUVs = true;
     }
 
     virtual int GetTotalVertices() const
@@ -53,10 +57,23 @@ public:
     {
         return parentMesh;
     }
+
+    virtual bool HasVertexNormals() const override
+    {
+        return hasNormals;
+    }
+
+    virtual glm::vec3 GetVertexNormal(int index) const override
+    {
+        return normals[index];
+    }
 protected:
     std::array<glm::vec3, N> positions;
     std::array<glm::vec3, N> normals;
+    bool hasNormals;
+
     std::array<glm::vec2, N> uvs;
+    bool hasUVs;
 
     void UpdateBoundingBox()
     {

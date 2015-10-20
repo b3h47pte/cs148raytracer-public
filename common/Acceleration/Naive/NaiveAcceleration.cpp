@@ -31,17 +31,13 @@ bool NaiveAcceleration::Trace(Ray* inputRay, IntersectionState* outputIntersecti
         size_t closestIntersection = 0;
         float minT = std::numeric_limits<float>::max();
         for (size_t i = 0; i < allIntersections.size(); ++i) {
-            if (allIntersections[i].intersectionT - minT < EPSILON) {
+            if (allIntersections[i].intersectionT - minT < SMALL_EPSILON) {
                 minT = allIntersections[i].intersectionT;
                 closestIntersection = i;
             }
         }
 
-        IntersectionState intersection = allIntersections[closestIntersection];
-        outputIntersection->intersectedPrimitive = intersection.intersectedPrimitive;
-        outputIntersection->intersectionRay = intersection.intersectionRay;
-        outputIntersection->intersectionT = intersection.intersectionT;
-        outputIntersection->hasIntersection = intersection.hasIntersection;
+        *outputIntersection = std::move(allIntersections[closestIntersection]);
     }
     
     return true;

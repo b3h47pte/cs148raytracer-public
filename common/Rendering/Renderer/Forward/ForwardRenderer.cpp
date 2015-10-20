@@ -16,7 +16,7 @@ void ForwardRenderer::InitializeRenderer()
 {
 }
 
-glm::vec3 ForwardRenderer::ComputeSampleColor(const IntersectionState& intersection) const
+glm::vec3 ForwardRenderer::ComputeSampleColor(const IntersectionState& intersection, const Ray& fromCameraRay) const
 {
     if (!intersection.hasIntersection) {
         return glm::vec3();
@@ -47,7 +47,7 @@ glm::vec3 ForwardRenderer::ComputeSampleColor(const IntersectionState& intersect
             const float lightAttenuation = light->ComputeLightAttenuation(intersectionPoint);
 
             // Note that the material should compute the parts of the lighting equation too.
-            const glm::vec3 brdfResponse = objectMaterial->ComputeBRDF(intersectionPoint, *light, sampleRays[s], *intersection.intersectedPrimitive);
+            const glm::vec3 brdfResponse = objectMaterial->ComputeBRDF(intersection, *light, sampleRays[s], fromCameraRay);
             sampleColor += brdfResponse * lightAttenuation;
         }
     }
