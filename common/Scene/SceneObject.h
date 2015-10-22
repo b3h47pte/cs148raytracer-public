@@ -9,7 +9,8 @@ public:
     SceneObject();
     virtual ~SceneObject();
 
-    virtual glm::mat4 GetTransformationMatrix() const;
+    virtual glm::mat4 GetObjectToWorldMatrix() const;
+    virtual glm::mat4 GetWorldToObjectMatrix() const;
 
     virtual glm::vec4 GetForwardDirection() const;
     virtual glm::vec4 GetRightDirection() const;
@@ -45,13 +46,14 @@ public:
         return boundingBox;
     }
 
-    virtual bool Trace(class Ray* inputRay, struct IntersectionState* outputIntersection) const override;
+    virtual bool Trace(const SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const override;
 protected:
     Box boundingBox;
     static const float MINIMUM_SCALE;
 
     virtual void UpdateTransformationMatrix();
-    glm::mat4 cachedTransformationMatrix;
+    glm::mat4 worldToObjectMatrix;
+    glm::mat4 objectToWorldMatrix;
 
     glm::vec4 position;
     glm::quat rotation;

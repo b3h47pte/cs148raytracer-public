@@ -11,6 +11,7 @@ public:
     virtual ~MeshObject();
     virtual void Finalize();
 
+
     void AddPrimitive(std::shared_ptr<class PrimitiveBase> newPrimitive);
     virtual void CreateAccelerationData(AccelerationTypes perObjectType);
 
@@ -22,7 +23,7 @@ public:
     virtual void SetMaterial(std::shared_ptr<class Material> inputMaterial);
     virtual const class Material* GetMaterial() const;
 
-    virtual bool Trace(class Ray* inputRay, struct IntersectionState* outputIntersection) const override;
+    virtual bool Trace(const class SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const override;
 protected:
     std::vector<std::shared_ptr<class PrimitiveBase>> elements;
     Box boundingBox;

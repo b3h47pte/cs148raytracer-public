@@ -2,14 +2,14 @@
 #include "common/Scene/Geometry/Ray/Ray.h"
 #include "common/Intersection/IntersectionState.h"
 
-bool NaiveAcceleration::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
+bool NaiveAcceleration::Trace(const SceneObject* parentObject, Ray* inputRay, IntersectionState* outputIntersection) const
 {
     std::vector<IntersectionState> allIntersections;
     for (size_t i = 0; i < nodes.size(); ++i) {
         IntersectionState newIntersection;
         newIntersection.TestAndCopyLimits(outputIntersection);
 
-        bool hit = nodes[i]->Trace(inputRay, &newIntersection);
+        bool hit = nodes[i]->Trace(parentObject, inputRay, &newIntersection);
         // early exit when we just want to know whether or not we hit.
         if (hit && !outputIntersection) {
             return true; 

@@ -6,7 +6,7 @@
 const float SceneObject::MINIMUM_SCALE = 0.01f;
 
 SceneObject::SceneObject():
-    cachedTransformationMatrix(1.f), position(0.f, 0.f, 0.f, 1.f), rotation(1.f, 0.f, 0.f, 0.f), scale(1.f)
+    worldToObjectMatrix(1.f), objectToWorldMatrix(1.f), position(0.f, 0.f, 0.f, 1.f), rotation(1.f, 0.f, 0.f, 0.f), scale(1.f)
 {
 }
 
@@ -15,18 +15,23 @@ SceneObject::~SceneObject()
 }
 
 
-glm::mat4 SceneObject::GetTransformationMatrix() const
+glm::mat4 SceneObject::GetObjectToWorldMatrix() const
 {
-    return cachedTransformationMatrix;
+    return objectToWorldMatrix;
+}
+
+glm::mat4 SceneObject::GetWorldToObjectMatrix() const
+{
+    return worldToObjectMatrix;
 }
 
 void SceneObject::UpdateTransformationMatrix()
 {
-    glm::mat4 newTransformation(1.f);
-    newTransformation = glm::scale(newTransformation, scale);
-    newTransformation = glm::mat4_cast(rotation) * newTransformation;
-    newTransformation = glm::translate(newTransformation, glm::vec3(position));
-    cachedTransformationMatrix = std::move(newTransformation);
+    objectToWorldMatrix = glm::mat4(1.f);
+    objectToWorldMatrix = glm::scale(glm::mat4(1.f), scale) * objectToWorldMatrix;
+    objectToWorldMatrix = glm::mat4_cast(rotation) * objectToWorldMatrix;
+    objectToWorldMatrix = glm::translate(glm::mat4(1.f), glm::vec3(position)) * objectToWorldMatrix;
+    worldToObjectMatrix = glm::inverse(objectToWorldMatrix);
 }
 
 glm::vec4 SceneObject::GetForwardDirection() const
@@ -124,7 +129,7 @@ void SceneObject::Finalize()
     acceleration->Initialize(childObjects);
 }
 
-bool SceneObject::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
+bool SceneObject::Trace(const SceneObject* parentObject, Ray* inputRay, IntersectionState* outputIntersection) const
 {
-    return acceleration->Trace(inputRay, outputIntersection);
+    return acceleration->Trace(this, inputRay, outputIntersection);
 }

@@ -8,4 +8,5 @@ public:
     virtual ~Material();
 
     virtual glm::vec3 ComputeBRDF(const struct IntersectionState& IntersectionState, const class Light& relevantLight, const class Ray& toLightRay, const class Ray& fromCameraRay) const = 0;
+    virtual std::shared_ptr<Material> Clone() const = 0;
 };

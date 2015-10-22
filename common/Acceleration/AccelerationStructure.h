@@ -19,7 +19,7 @@ public:
         }
     }
 
-    virtual bool Trace(class Ray* inputRay, struct IntersectionState* outputIntersection) const = 0;
+    virtual bool Trace(const class SceneObject* sceneObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const = 0;
 protected:
     std::vector<std::shared_ptr<AccelerationNode>> nodes;
 };

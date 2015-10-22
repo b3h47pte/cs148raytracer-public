@@ -28,6 +28,7 @@ struct IntersectionState
     int remainingRefractionBounces;
 
     const class PrimitiveBase* intersectedPrimitive;
+    const class SceneObject* primitiveParent;
     Ray intersectionRay;
     float intersectionT;
     bool hasIntersection;

@@ -38,3 +38,8 @@ glm::vec3 BlinnPhongMaterial::ComputeBRDF(const IntersectionState& intersection,
 
     return diffuseResponse + specularResponse;
 }
+
+std::shared_ptr<Material> BlinnPhongMaterial::Clone() const
+{
+    return std::make_shared<BlinnPhongMaterial>(*this);
+}

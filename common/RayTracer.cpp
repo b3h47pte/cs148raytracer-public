@@ -41,11 +41,12 @@ void RayTracer::Run()
         for (int c = 0; c < static_cast<int>(currentResolution.x); ++c) {
             glm::vec3 finalColor;
 
-            glm::vec2 sampleOffset(0.5f, 0.5f);
+            glm::vec2 sampleOffset(0.0f, 0.0f);
             int totalSamplesUsed = 0;
             for (int s = 0; s < maxSamplesPerPixel; ++s) {
+                // sampleOffset should go from (-0.5, -0.5) to (0.5, 0.5) because (0,0) shoots straight forward.
                 if (maxSamplesPerPixel != 1) {
-                    sampleOffset = currentSampler->Sample2D(glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f));
+                    sampleOffset = currentSampler->Sample2D(glm::vec2(-.5f, -.5f), glm::vec2(.5f, .5f));
                 }
 
                 glm::vec2 normalizedCoordinates(static_cast<float>(c) + sampleOffset.x, static_cast<float>(r)+sampleOffset.y);

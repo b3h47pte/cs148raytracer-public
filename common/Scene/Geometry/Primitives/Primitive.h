@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/Scene/Geometry/Primitives/PrimitiveBase.h"
+#include "common/Scene/Geometry/Mesh/MeshObject.h"
 #include "common/Scene/SceneObject.h"
 
 template<int N>
@@ -67,6 +68,7 @@ public:
     {
         return normals[index];
     }
+
 protected:
     std::array<glm::vec3, N> positions;
     std::array<glm::vec3, N> normals;

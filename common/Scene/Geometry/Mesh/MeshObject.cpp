@@ -2,6 +2,7 @@
 #include "common/Acceleration/AccelerationCommon.h"
 #include "common/Scene/Geometry/Primitives/PrimitiveBase.h"
 #include "common/Scene/Geometry/Ray/Ray.h"
+#include "common/Scene/SceneObject.h"
 #include "common/Intersection/IntersectionState.h"
 
 MeshObject::MeshObject() :
@@ -40,9 +41,9 @@ void MeshObject::CreateAccelerationData(AccelerationTypes perObjectType)
     assert(acceleration);
 }
 
-bool MeshObject::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
+bool MeshObject::Trace(const SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const
 {
-    return acceleration->Trace(inputRay, outputIntersection);
+    return acceleration->Trace(parentObject, inputRay, outputIntersection);
 }
 
 const Material* MeshObject::GetMaterial() const

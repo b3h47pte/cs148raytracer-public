@@ -16,7 +16,7 @@ bool Scene::Trace(class Ray* inputRay, IntersectionState* outputIntersection) co
 {
     assert(inputRay);
 
-    bool didIntersect = acceleration->Trace(inputRay, outputIntersection);
+    bool didIntersect = acceleration->Trace(nullptr, inputRay, outputIntersection);
     if (outputIntersection != nullptr) {
         // send out reflection ray.
 

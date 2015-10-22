@@ -14,13 +14,18 @@ glm::vec3 Triangle::GetPrimitiveNormal() const
     return glm::normalize(glm::cross(edge1, edge2));
 }
 
-bool Triangle::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
+bool Triangle::Trace(const SceneObject* parentObject, Ray* inputRay, IntersectionState* outputIntersection) const
 {
+    assert(parentObject);
+    // Convert ray into object space.
+    const glm::vec3 rayPos = glm::vec3(parentObject->GetWorldToObjectMatrix() * inputRay->GetPosition());
+    const glm::vec3 rayDir = glm::vec3(parentObject->GetWorldToObjectMatrix() * inputRay->GetForwardDirection());
+
     // Use Moller-Trumbore Intersection (Fast, Minimum Storage Ray/Triangle Intersection)
     // Paper: http://www.cs.virginia.edu/~gfx/Courses/2003/ImageSynthesis/papers/Acceleration/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf
     const glm::vec3 edge1 = positions[1] - positions[0];
     const glm::vec3 edge2 = positions[2] - positions[0];
-    const glm::vec3 pvec = glm::cross(inputRay->GetRayDirection(), edge2);
+    const glm::vec3 pvec = glm::cross(rayDir, edge2);
 
     float det = glm::dot(edge1, pvec);
 
@@ -30,14 +35,14 @@ bool Triangle::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
 
     const float invDet = 1.f / det;
 
-    const glm::vec3 tvec = glm::vec3(inputRay->GetPosition()) - positions[0];
+    const glm::vec3 tvec = glm::vec3(rayPos) - positions[0];
     const float u = glm::dot(tvec, pvec) * invDet;
     if (u < 0.f || u > 1.f) {
         return false;
     }
 
     const glm::vec3 qvec = glm::cross(tvec, edge1);
-    const float v = glm::dot(inputRay->GetRayDirection(), qvec) * invDet;
+    const float v = glm::dot(rayDir, qvec) * invDet;
     if (v < 0.f || u + v > 1.f) {
         return false;
     }
@@ -49,6 +54,7 @@ bool Triangle::Trace(Ray* inputRay, IntersectionState* outputIntersection) const
 
     if (outputIntersection) {
         outputIntersection->intersectionRay = *inputRay;
+        outputIntersection->primitiveParent = parentObject;
         outputIntersection->intersectionT = t;
         outputIntersection->intersectedPrimitive = this;
         outputIntersection->hasIntersection = true;
