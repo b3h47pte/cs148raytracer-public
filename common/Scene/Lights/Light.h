@@ -6,7 +6,7 @@
 class Light : public SceneObject
 {
 public:
-    virtual void ComputeSampleRays(std::vector<Ray>& output, glm::vec3 origin) const = 0;
+    virtual void ComputeSampleRays(std::vector<Ray>& output, glm::vec3 origin, glm::vec3 normal) const = 0;
     virtual float ComputeLightAttenuation(glm::vec3 origin) const = 0;
 
     virtual glm::vec3 GetLightColor() const;

@@ -37,7 +37,7 @@ glm::vec3 ForwardRenderer::ComputeSampleColor(const IntersectionState& intersect
 
         // Sample light using rays, Number of samples and where to sample is determined by the light.
         std::vector<Ray> sampleRays;
-        light->ComputeSampleRays(sampleRays, intersectionPoint);
+        light->ComputeSampleRays(sampleRays, intersectionPoint, intersection.ComputeNormal());
 
         for (size_t s = 0; s < sampleRays.size(); ++s) {
             // note that max T should be set to be right before the light.

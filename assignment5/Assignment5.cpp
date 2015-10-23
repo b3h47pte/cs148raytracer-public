@@ -47,12 +47,20 @@ std::shared_ptr<Scene> Assignment5::CreateScene() const
     pointLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
     newScene->AddLight(pointLight);
 
+    std::shared_ptr<Light> sunLight = std::make_shared<DirectionalLight>();
+    sunLight->Rotate(glm::vec3(SceneObject::GetWorldRight()), -PI / 4.f);
+
+    sunLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
+    newScene->AddLight(sunLight);
+
     return newScene;
 }
 
 std::shared_ptr<class Sampler> Assignment5::CreateSampler() const
 {
-    return std::make_shared<RandomSampler>();
+    std::shared_ptr<JitterSampler> sampler = std::make_shared<JitterSampler>();
+    sampler->Initialize(glm::ivec3(1, 1, 1), GetSamplesPerPixel());
+    return sampler;
 }
 
 std::shared_ptr<class Renderer> Assignment5::CreateRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<Sampler> sampler) const

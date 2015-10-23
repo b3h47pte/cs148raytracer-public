@@ -39,6 +39,8 @@ void RayTracer::Run()
 
     for (int r = 0; r < static_cast<int>(currentResolution.y); ++r) {
         for (int c = 0; c < static_cast<int>(currentResolution.x); ++c) {
+            currentSampler->ResetSamplerState();
+
             glm::vec3 finalColor;
 
             glm::vec2 sampleOffset(0.0f, 0.0f);
@@ -71,6 +73,8 @@ void RayTracer::Run()
                 if (!storedApplication->NotifyNewPixelSample(sampleColor, s)) {
                     break;
                 }
+
+                currentSampler->FinishSample();
             }
             imageWriter.SetPixelColor(finalColor / static_cast<float>(totalSamplesUsed), c, r);
         }
