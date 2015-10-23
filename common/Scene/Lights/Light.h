@@ -9,7 +9,7 @@ public:
     virtual void ComputeSampleRays(std::vector<Ray>& output, glm::vec3 origin) const = 0;
     virtual float ComputeLightAttenuation(glm::vec3 origin) const = 0;
 
-    glm::vec3 GetLightColor() const;
+    virtual glm::vec3 GetLightColor() const;
     void SetLightColor(glm::vec3 input);
 
 protected:
