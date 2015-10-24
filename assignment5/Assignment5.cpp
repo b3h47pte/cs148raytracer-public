@@ -20,9 +20,12 @@ std::shared_ptr<Scene> Assignment5::CreateScene() const
     cubeMaterial->SetSpecular(glm::vec3(0.6f, 0.6f, 0.6f), 40.f);
 
     // Objects
-    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Original.obj");
+    std::vector<std::shared_ptr<aiMaterial>> loadedMaterials;
+    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Original.obj", &loadedMaterials);
     for (size_t i = 0; i < cubeObjects.size(); ++i) {
-        cubeObjects[i]->SetMaterial(cubeMaterial->Clone());
+        std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
+        materialCopy->LoadMaterialFromAssimp(loadedMaterials[i]);
+        cubeObjects[i]->SetMaterial(materialCopy);
     }
 
     std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();

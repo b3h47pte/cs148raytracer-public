@@ -1,6 +1,7 @@
 #include "common/Rendering/Material/BlinnPhong/BlinnPhongMaterial.h"
 #include "common/Intersection/IntersectionState.h"
 #include "common/Scene/Lights/Light.h"
+#include "assimp/material.h"
 
 BlinnPhongMaterial::BlinnPhongMaterial():
     shininess(0.f)
@@ -42,4 +43,30 @@ glm::vec3 BlinnPhongMaterial::ComputeBRDF(const IntersectionState& intersection,
 std::shared_ptr<Material> BlinnPhongMaterial::Clone() const
 {
     return std::make_shared<BlinnPhongMaterial>(*this);
+}
+
+void BlinnPhongMaterial::LoadMaterialFromAssimp(std::shared_ptr<aiMaterial> assimpMaterial)
+{
+    if (!assimpMaterial) {
+        return;
+    }
+
+    assimpMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, glm::value_ptr(diffuseColor), nullptr);
+    assimpMaterial->Get(AI_MATKEY_COLOR_SPECULAR, glm::value_ptr(specularColor), nullptr);
+    assimpMaterial->Get(AI_MATKEY_SHININESS, &shininess, nullptr);
+
+    if (assimpMaterial->GetTextureCount(aiTextureType_DIFFUSE)) {
+        aiString aiDiffusePath;
+        assimpMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &aiDiffusePath);
+        std::string diffusePath(aiDiffusePath.C_Str());
+        (void)diffusePath;
+    }
+
+    if (assimpMaterial->GetTextureCount(aiTextureType_SPECULAR)) {
+        aiString aiSpecularPath;
+        assimpMaterial->GetTexture(aiTextureType_SPECULAR, 0, &aiSpecularPath);
+        std::string specularPath(aiSpecularPath.C_Str());
+        (void)specularPath;
+    }
+
 }
