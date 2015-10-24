@@ -8,6 +8,7 @@
 #include <limits>
 #include <cmath>
 #include <array>
+#include <functional>
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"

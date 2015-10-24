@@ -1,13 +1,13 @@
 #include "common/Rendering/Renderer/Forward/ForwardRenderer.h"
 #include "common/Scene/Scene.h"
-#include "common/Sampling/Sampler.h"
+#include "common/Sampling/ColorSampler.h"
 #include "common/Scene/Lights/Light.h"
 #include "common/Scene/Geometry/Primitives/Primitive.h"
 #include "common/Scene/Geometry/Mesh/MeshObject.h"
 #include "common/Rendering/Material/Material.h"
 #include "common/Intersection/IntersectionState.h"
 
-ForwardRenderer::ForwardRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<Sampler> sampler):
+ForwardRenderer::ForwardRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<ColorSampler> sampler) :
     Renderer(scene, sampler)
 {
 }

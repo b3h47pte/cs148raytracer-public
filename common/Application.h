@@ -10,8 +10,8 @@ public:
     virtual ~Application() {}
     virtual std::shared_ptr<class Camera> CreateCamera() const = 0;
     virtual std::shared_ptr<class Scene> CreateScene() const = 0;
-    virtual std::shared_ptr<class Sampler> CreateSampler() const = 0;
-    virtual std::shared_ptr<class Renderer> CreateRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class Sampler> sampler) const = 0;
+    virtual std::shared_ptr<class ColorSampler> CreateSampler() const = 0;
+    virtual std::shared_ptr<class Renderer> CreateRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class ColorSampler> sampler) const = 0;
 
     // ray tracing properties
     virtual int GetMaxReflectionBounces() const = 0;

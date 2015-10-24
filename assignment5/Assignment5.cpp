@@ -56,14 +56,14 @@ std::shared_ptr<Scene> Assignment5::CreateScene() const
     return newScene;
 }
 
-std::shared_ptr<class Sampler> Assignment5::CreateSampler() const
+std::shared_ptr<ColorSampler> Assignment5::CreateSampler() const
 {
-    std::shared_ptr<JitterSampler> sampler = std::make_shared<JitterSampler>();
-    sampler->Initialize(glm::ivec3(1, 1, 1), GetSamplesPerPixel());
+    std::shared_ptr<JitterColorSampler> sampler = std::make_shared<JitterColorSampler>();
+    sampler->SetGridSize(glm::ivec3(1, 1, 1));
     return sampler;
 }
 
-std::shared_ptr<class Renderer> Assignment5::CreateRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<Sampler> sampler) const
+std::shared_ptr<class Renderer> Assignment5::CreateRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<ColorSampler> sampler) const
 {
     return std::make_shared<ForwardRenderer>(scene, sampler);
 }

@@ -19,7 +19,7 @@ std::string Application::GetOutputFilename() const
 
 int Application::GetSamplesPerPixel() const
 {
-    return 1;
+    return 16;
 }
 
 glm::vec2 Application::GetImageOutputResolution() const
