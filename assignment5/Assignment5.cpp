@@ -4,8 +4,9 @@
 std::shared_ptr<Camera> Assignment5::CreateCamera() const
 {
     const glm::vec2 resolution = GetImageOutputResolution();
-    std::shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(resolution.x / resolution.y, 45.f);
-    camera->SetPosition(glm::vec3(0.f, 0.f, 15.f));
+    std::shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(resolution.x / resolution.y, 26.6f);
+    camera->SetPosition(glm::vec3(0.f, -4.1469f, 0.73693f));
+    camera->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
     return camera;
 }
 
@@ -19,39 +20,21 @@ std::shared_ptr<Scene> Assignment5::CreateScene() const
     cubeMaterial->SetSpecular(glm::vec3(0.6f, 0.6f, 0.6f), 40.f);
 
     // Objects
-    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("cube.obj");
+    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Original.obj");
     for (size_t i = 0; i < cubeObjects.size(); ++i) {
         cubeObjects[i]->SetMaterial(cubeMaterial->Clone());
     }
 
     std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
     cubeSceneObject->AddMeshObject(cubeObjects);
-    cubeSceneObject->MultScale(0.5f);
+    cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
     newScene->AddSceneObject(cubeSceneObject);
-
-    std::shared_ptr<SceneObject> cubeSceneObject2 = std::make_shared<SceneObject>();
-    cubeSceneObject2->AddMeshObject(cubeObjects);
-    cubeSceneObject2->Translate(glm::vec3(6.f, 0.f, 0.f));
-    cubeSceneObject2->MultScale(0.5f);
-    newScene->AddSceneObject(cubeSceneObject2);
-
-    std::shared_ptr<SceneObject> cubeSceneObject3 = std::make_shared<SceneObject>();
-    cubeSceneObject3->AddMeshObject(cubeObjects);
-    cubeSceneObject3->Translate(glm::vec3(-6.f, 0.f, 0.f));
-    cubeSceneObject3->MultScale(0.5f);
-    newScene->AddSceneObject(cubeSceneObject3);
 
     // Lights
     std::shared_ptr<Light> pointLight = std::make_shared<PointLight>();
-    pointLight->SetPosition(glm::vec3(10.f, 10.f, 10.f));
+    pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
     pointLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
     newScene->AddLight(pointLight);
-
-    std::shared_ptr<Light> sunLight = std::make_shared<DirectionalLight>();
-    sunLight->Rotate(glm::vec3(SceneObject::GetWorldRight()), -PI / 4.f);
-
-    sunLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
-    newScene->AddLight(sunLight);
 
     return newScene;
 }
@@ -86,4 +69,9 @@ int Assignment5::GetMaxReflectionBounces() const
 int Assignment5::GetMaxRefractionBounces() const
 {
     return 0;
+}
+
+glm::vec2 Assignment5::GetImageOutputResolution() const
+{
+    return glm::vec2(640.f, 480.f);
 }
