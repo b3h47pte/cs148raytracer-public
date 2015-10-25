@@ -10,7 +10,8 @@ class SceneObject;
 class Scene : public std::enable_shared_from_this<Scene>
 {
 public:
-    void GenerateAccelerationData(AccelerationTypes sceneType, AccelerationTypes perObjectType);
+    void GenerateDefaultAccelerationData();
+    void GenerateAccelerationData(AccelerationTypes inputType);
 
     // if outputIntersection is NULL, this merely checks whether or not the inputRay hits something.
     // if outputIntersection is NOT NULL, then this will check whether or not the inputRay hits something,

@@ -8,6 +8,7 @@
 #include "common/Output/ImageWriter.h"
 #include "common/Rendering/Renderer.h"
 
+#include "common/Scene/Geometry/Primitives/Triangle/Triangle.h"
 RayTracer::RayTracer(std::unique_ptr<class Application> app):
     storedApplication(std::move(app))
 {
@@ -27,7 +28,7 @@ void RayTracer::Run()
 
     // Scene preprocessing -- generate acceleration structures, etc.
     // After this call, we are guaranteed that the "acceleration" member of the scene and all scene objects within the scene will be non-NULL.
-    currentScene->GenerateAccelerationData(storedApplication->GetSceneAccelerationType(), storedApplication->GetPerObjectAccelerationType());
+    currentScene->GenerateDefaultAccelerationData();
     currentScene->Finalize();
 
     // Prepare for Output

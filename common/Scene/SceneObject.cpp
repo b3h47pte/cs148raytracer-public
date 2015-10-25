@@ -109,6 +109,14 @@ void SceneObject::AddMeshObject(const std::vector<std::shared_ptr<MeshObject>>& 
     }
 }
 
+void SceneObject::CreateDefaultAccelerationData()
+{
+    if (!acceleration) {
+        CreateAccelerationData(AccelerationTypes::NONE);
+    }
+    assert(acceleration);
+}
+
 void SceneObject::CreateAccelerationData(AccelerationTypes perObjectType)
 {
     acceleration = AccelerationGenerator::CreateStructureFromType(perObjectType);
@@ -125,6 +133,11 @@ void SceneObject::Finalize()
         childObjects[i]->Finalize();
         boundingBox.IncludeBox(childObjects[i]->GetBoundingBox());
     }
+
+    // scene object is in world space 
+    boundingBox.minVertex = glm::vec3(objectToWorldMatrix * glm::vec4(boundingBox.minVertex, 1.f));
+    boundingBox.maxVertex = glm::vec3(objectToWorldMatrix * glm::vec4(boundingBox.maxVertex, 1.f));
+
     assert(acceleration);
     acceleration->Initialize(childObjects);
 }

@@ -14,5 +14,4 @@ public:
     virtual int GetMaxReflectionBounces() const;
     virtual int GetMaxRefractionBounces() const;
     virtual glm::vec2 GetImageOutputResolution() const;
-private:
 };

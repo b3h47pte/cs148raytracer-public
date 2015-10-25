@@ -10,6 +10,9 @@ namespace AccelerationGenerator
             case AccelerationTypes::NONE:
                 acceleration = make_unique<NaiveAcceleration>();
                 break;
+            case AccelerationTypes::BVH:
+                acceleration = make_unique<BVHAcceleration>();
+                break;
             default:
                 throw std::runtime_error("ERROR: Unsupported acceleration structure.");
                 break;

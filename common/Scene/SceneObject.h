@@ -39,6 +39,7 @@ public:
     virtual void AddMeshObject(const std::vector<std::shared_ptr<MeshObject>>& objects);
     virtual void Finalize();
 
+    virtual void CreateDefaultAccelerationData();
     virtual void CreateAccelerationData(AccelerationTypes perObjectType);
 
     virtual Box GetBoundingBox()

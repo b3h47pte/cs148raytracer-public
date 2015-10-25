@@ -2,13 +2,22 @@
 #include "common/Scene/Geometry/Ray/Ray.h"
 #include "common/Acceleration/AccelerationCommon.h"
 
-void Scene::GenerateAccelerationData(AccelerationTypes sceneType, AccelerationTypes perObjectType)
+void Scene::GenerateDefaultAccelerationData()
 {
-    acceleration = AccelerationGenerator::CreateStructureFromType(sceneType);
-    assert(acceleration);
-    for (size_t i = 0; i < sceneObjects.size(); ++i) {
-        sceneObjects[i]->CreateAccelerationData(perObjectType);
+    if (!acceleration) {
+        GenerateAccelerationData(AccelerationTypes::NONE);
     }
+
+    assert(acceleration);
+
+    for (size_t i = 0; i < sceneObjects.size(); ++i) {
+        sceneObjects[i]->CreateDefaultAccelerationData();
+    }
+}
+
+void Scene::GenerateAccelerationData(AccelerationTypes inputType)
+{
+    acceleration = AccelerationGenerator::CreateStructureFromType(inputType);
 }
 
 

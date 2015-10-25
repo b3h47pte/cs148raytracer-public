@@ -7,5 +7,5 @@ class AccelerationNode
 {
 public:
     virtual Box GetBoundingBox() = 0;
-    virtual bool Trace(const class SceneObject* parentObejct, class Ray* inputRay, struct IntersectionState* outputIntersection) const = 0;
+    virtual bool Trace(const class SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const = 0;
 };

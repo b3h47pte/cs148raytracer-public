@@ -17,9 +17,14 @@ public:
         for (size_t i = 0; i < inputData.size(); ++i) {
             nodes[i] = inputData.at(i);
         }
+
+        InternalInitialization();
     }
 
     virtual bool Trace(const class SceneObject* sceneObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const = 0;
 protected:
     std::vector<std::shared_ptr<AccelerationNode>> nodes;
+
+private:
+    virtual void InternalInitialization() {}
 };

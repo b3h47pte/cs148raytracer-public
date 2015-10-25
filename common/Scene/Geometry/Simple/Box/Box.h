@@ -10,6 +10,9 @@ public:
 
     void Reset();
     void IncludeBox(const Box& box);
+    glm::vec3 Center() const;
+
+    bool Trace(const class SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const;
 
     glm::vec3 minVertex;
     glm::vec3 maxVertex;

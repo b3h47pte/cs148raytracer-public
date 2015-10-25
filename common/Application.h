@@ -26,10 +26,6 @@ public:
     // whether or not to continue sampling the scene from the camera.
     virtual bool NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleIndex) = 0;
 
-    // Acceleration Properties
-    virtual AccelerationTypes GetSceneAccelerationType() const;
-    virtual AccelerationTypes GetPerObjectAccelerationType() const;
-
     // Postprocessing
     virtual void PerformImagePostprocessing(class ImageWriter& imageWriter);
 
