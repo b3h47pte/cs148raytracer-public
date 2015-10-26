@@ -68,7 +68,7 @@ std::shared_ptr<class Renderer> Assignment5::CreateRenderer(std::shared_ptr<Scen
 int Assignment5::GetSamplesPerPixel() const
 {
     // ASSIGNMENT 5 TODO: Change the '1' here to increase the maximum number of samples used per pixel. (Part 1).
-    return 1;
+    return 1; 
 }
 
 bool Assignment5::NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleIndex)
