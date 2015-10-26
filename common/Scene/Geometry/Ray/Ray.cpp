@@ -3,6 +3,7 @@
 Ray::Ray() :
     rayDirection(glm::vec3(0.f, 0.f, -1.f)), maxT(std::numeric_limits<float>::max())
 {
+    DIAGNOSTICS_STAT(DiagnosticsType::RAYS_CREATED);
     position = glm::vec4(0.f, 0.f, 0.f, 1.f);
 }
 

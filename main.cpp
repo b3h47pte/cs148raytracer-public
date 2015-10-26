@@ -15,8 +15,6 @@
 #include "assignment8/Assignment8.h"
 #endif
 
-#include <chrono>
-
 int main(int argc, char** argv)  
 {
     std::unique_ptr<APPLICATION> currentApplication = make_unique<APPLICATION>();
@@ -26,6 +24,8 @@ int main(int argc, char** argv)
     timer.Tick();
     rayTracer.Run();
     timer.Tock();
+
+    DIAGNOSTICS_PRINT();
 
 #ifdef _WIN32
     int exit = 0;

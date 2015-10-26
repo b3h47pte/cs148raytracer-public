@@ -31,6 +31,7 @@ public:
     virtual glm::vec3 ComputeSampleCoordinate(SamplerState& state) const;
 protected:
     virtual float GenerateRandomNumber(SamplerState& state) const;
+    virtual bool NotifyColorSampleForEarlyExit(SamplerState& state, glm::vec3 inColor) const;
 
     class Application* storedApp;
     class Scene* storedScene;

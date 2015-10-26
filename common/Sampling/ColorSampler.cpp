@@ -21,6 +21,7 @@ glm::vec3 ColorSampler::ComputeSamplesAndColor(const int maxSamples, const int d
     std::unique_ptr<SamplerState> newState = CreateSampler(randomDevice, maxSamples, dimensions);
 
     glm::vec3 finalColor;
+    int samplesUsed = 0;
     for (int i = 0; i < maxSamples; ++i) {
         // Compute normalized sample. 
         glm::vec3 sampleCoordinates = ComputeSampleCoordinate(*newState.get());
@@ -28,11 +29,16 @@ glm::vec3 ColorSampler::ComputeSamplesAndColor(const int maxSamples, const int d
         // Compute sample color.
         glm::vec3 sampleColor = colorComputer(sampleCoordinates);
         finalColor += sampleColor;
+        ++newState->samplesComputed;
+
+        if (NotifyColorSampleForEarlyExit(*newState.get(), sampleColor)) {
+            break;
+        }
 
         newState->colorHistory.push_back(sampleColor);
-        ++newState->samplesComputed;
+        
     }
-    finalColor /= static_cast<float>(maxSamples);
+    finalColor /= static_cast<float>(newState->samplesComputed);
     return finalColor;
 }
 
@@ -48,4 +54,9 @@ glm::vec3 ColorSampler::ComputeSampleCoordinate(SamplerState& state) const
 float ColorSampler::GenerateRandomNumber(SamplerState& state) const
 {
     return static_cast<float>(state.dist(state.gen));
+}
+
+bool ColorSampler::NotifyColorSampleForEarlyExit(SamplerState& state, glm::vec3 inColor) const
+{
+    return false;
 }

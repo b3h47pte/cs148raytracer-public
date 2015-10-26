@@ -32,6 +32,7 @@ glm::vec3 Box::Center() const
 
 bool Box::Trace(const class SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const
 {
+    DIAGNOSTICS_STAT(DiagnosticsType::BOX_INTERSECTIONS);
     glm::mat4 spaceTransform(1.f);
     if (parentObject) {
         spaceTransform = parentObject->GetWorldToObjectMatrix();

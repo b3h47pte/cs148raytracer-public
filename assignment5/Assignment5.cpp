@@ -31,7 +31,7 @@ std::shared_ptr<Scene> Assignment5::CreateScene() const
     std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
     cubeSceneObject->AddMeshObject(cubeObjects);
     cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
-    cubeSceneObject->CreateAccelerationData(AccelerationTypes::BVH);
+    cubeSceneObject->CreateAccelerationData(AccelerationTypes::NONE);
     newScene->AddSceneObject(cubeSceneObject);
 
     // Lights
@@ -45,8 +45,18 @@ std::shared_ptr<Scene> Assignment5::CreateScene() const
 }
 std::shared_ptr<ColorSampler> Assignment5::CreateSampler() const
 {
-    std::shared_ptr<JitterColorSampler> sampler = std::make_shared<JitterColorSampler>();
-    sampler->SetGridSize(glm::ivec3(1, 1, 1));
+    std::shared_ptr<JitterColorSampler> jitter = std::make_shared<JitterColorSampler>();
+    // ASSIGNMENT 5 TODO (OPTIONAL): Change the grid size to be glm::ivec3(X, Y, 1).
+    jitter->SetGridSize(glm::ivec3(1, 1, 1));
+
+    std::shared_ptr<SimpleAdaptiveSampler> sampler = std::make_shared<SimpleAdaptiveSampler>();
+    sampler->SetInternalSampler(jitter);
+
+    // ASSIGNMENT 5 TODO: Change the '1' here to be higher and see what your results are. (Part 3)
+    sampler->SetEarlyExitParameters(SMALL_EPSILON, 1);
+
+    // ASSIGNMENT 5 TODO: Comment out 'return jitter;' to use the adaptive sampler. (Part 2)
+    return jitter;
     return sampler;
 }
 
@@ -57,6 +67,7 @@ std::shared_ptr<class Renderer> Assignment5::CreateRenderer(std::shared_ptr<Scen
 
 int Assignment5::GetSamplesPerPixel() const
 {
+    // ASSIGNMENT 5 TODO: Change the '1' here to increase the maximum number of samples used per pixel. (Part 1).
     return 1;
 }
 

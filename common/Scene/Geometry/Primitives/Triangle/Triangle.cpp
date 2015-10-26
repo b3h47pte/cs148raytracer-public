@@ -16,6 +16,7 @@ glm::vec3 Triangle::GetPrimitiveNormal() const
 
 bool Triangle::Trace(const SceneObject* parentObject, Ray* inputRay, IntersectionState* outputIntersection) const
 {
+    DIAGNOSTICS_STAT(DiagnosticsType::TRIANGLE_INTERSECTIONS);
     assert(parentObject);
     // Convert ray into object space.
     const glm::vec3 rayPos = glm::vec3(parentObject->GetWorldToObjectMatrix() * inputRay->GetPosition());
