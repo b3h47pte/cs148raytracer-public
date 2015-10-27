@@ -52,8 +52,8 @@ std::shared_ptr<ColorSampler> Assignment5::CreateSampler() const
     std::shared_ptr<SimpleAdaptiveSampler> sampler = std::make_shared<SimpleAdaptiveSampler>();
     sampler->SetInternalSampler(jitter);
 
-    // ASSIGNMENT 5 TODO: Change the '1' here to be higher and see what your results are. (Part 3)
-    sampler->SetEarlyExitParameters(SMALL_EPSILON, 1);
+    // ASSIGNMENT 5 TODO: Change the '1.f' in '1.f * SMALL_EPSILON' here to be higher and see what your results are. (Part 3)
+    sampler->SetEarlyExitParameters(1.f * SMALL_EPSILON, 1);
 
     // ASSIGNMENT 5 TODO: Comment out 'return jitter;' to use the adaptive sampler. (Part 2)
     return jitter;
