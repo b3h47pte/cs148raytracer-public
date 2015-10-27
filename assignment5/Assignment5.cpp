@@ -46,7 +46,7 @@ std::shared_ptr<Scene> Assignment5::CreateScene() const
 std::shared_ptr<ColorSampler> Assignment5::CreateSampler() const
 {
     std::shared_ptr<JitterColorSampler> jitter = std::make_shared<JitterColorSampler>();
-    // ASSIGNMENT 5 TODO (OPTIONAL): Change the grid size to be glm::ivec3(X, Y, 1).
+    // ASSIGNMENT 5 TODO: Change the grid size to be glm::ivec3(X, Y, 1).
     jitter->SetGridSize(glm::ivec3(1, 1, 1));
 
     std::shared_ptr<SimpleAdaptiveSampler> sampler = std::make_shared<SimpleAdaptiveSampler>();
