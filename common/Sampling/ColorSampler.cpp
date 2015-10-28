@@ -21,7 +21,6 @@ glm::vec3 ColorSampler::ComputeSamplesAndColor(const int maxSamples, const int d
     std::unique_ptr<SamplerState> newState = CreateSampler(randomDevice, maxSamples, dimensions);
 
     glm::vec3 finalColor;
-    int samplesUsed = 0;
     for (int i = 0; i < maxSamples; ++i) {
         // Compute normalized sample. 
         glm::vec3 sampleCoordinates = ComputeSampleCoordinate(*newState.get());

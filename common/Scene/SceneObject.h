@@ -42,7 +42,7 @@ public:
     virtual void CreateDefaultAccelerationData();
     virtual void CreateAccelerationData(AccelerationTypes perObjectType);
 
-    virtual Box GetBoundingBox()
+    virtual Box GetBoundingBox() override
     {
         return boundingBox;
     }
