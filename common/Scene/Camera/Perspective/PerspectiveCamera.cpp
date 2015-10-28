@@ -15,8 +15,6 @@ std::shared_ptr<Ray> PerspectiveCamera::GenerateRayForNormalizedCoordinates(glm:
     // Imagine that a frustum exists in front of the camera (which we assume exists at a singular point).
     // Then, given the aspect ratio and vertical field of view we can determine where in the world the 
     // image plane will exist and how large it is assuming we know for sure that z = 1 (this is fairly arbitrary for now).
-    const float zPlane = 1.f;
-
     const float planeHeight = std::tan(fov / 2.f) * 2.f;
     const float planeWidth = planeHeight * aspectRatio;
 
