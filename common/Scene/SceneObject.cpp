@@ -134,9 +134,14 @@ void SceneObject::Finalize()
         boundingBox.IncludeBox(childObjects[i]->GetBoundingBox());
     }
 
-    // scene object is in world space 
+    // TODO: Store the obj 2 world matrix in box and do box in object space.
+    // scene object bounding box is in world space ... can't think of an easy way to get it to be in object space.
     boundingBox.minVertex = glm::vec3(objectToWorldMatrix * glm::vec4(boundingBox.minVertex, 1.f));
     boundingBox.maxVertex = glm::vec3(objectToWorldMatrix * glm::vec4(boundingBox.maxVertex, 1.f));
+
+    glm::vec3 tmp = boundingBox.minVertex;
+    boundingBox.minVertex = glm::min(boundingBox.minVertex, boundingBox.maxVertex);
+    boundingBox.maxVertex = glm::max(tmp, boundingBox.maxVertex);
 
     assert(acceleration);
     acceleration->Initialize(childObjects);

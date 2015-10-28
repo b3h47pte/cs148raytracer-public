@@ -2,6 +2,11 @@
 #include "common/Scene/Geometry/Ray/Ray.h"
 #include "common/Intersection/IntersectionState.h"
 
+void NaiveAcceleration::AddNode(std::shared_ptr<AccelerationNode> node)
+{
+    nodes.push_back(std::move(node));
+}
+
 bool NaiveAcceleration::Trace(const SceneObject* parentObject, Ray* inputRay, IntersectionState* outputIntersection) const
 {
     std::vector<IntersectionState> allIntersections;

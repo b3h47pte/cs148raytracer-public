@@ -7,6 +7,7 @@ class Timer
 {
 public:
     Timer(const std::string& descriptor);
+    ~Timer();
 
     // Starts the timer
     void Tick();
@@ -16,4 +17,5 @@ public:
 private:
     std::string storedDescriptor;
     std::chrono::time_point<std::chrono::high_resolution_clock> startTime;
+    bool tickHandled;
 };

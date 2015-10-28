@@ -46,14 +46,10 @@ bool Box::Trace(const class SceneObject* parentObject, class Ray* inputRay, stru
     float globalMaxT = std::numeric_limits<float>::max();
 
     // Do intersection against slabs in the X, Y, and then Z direction. Make sure we are within the slabs for all three axes.
+    int usedDimensions = 0;
     bool didIntersect = false;
     for (int i = 0; i < 3; ++i) {
         if (std::abs(rayDir[i]) < SMALL_EPSILON) {
-            // If we're not moving in this direction then we should already be within the specified by range.
-            if (rayPos[i] - minVertex[i] < SMALL_EPSILON || rayPos[i] - maxVertex[i] > SMALL_EPSILON) {
-                return false;
-            }
-
             continue;
         }
 
@@ -64,13 +60,14 @@ bool Box::Trace(const class SceneObject* parentObject, class Ray* inputRay, stru
             std::swap(dimMinT, dimMaxT);
         }
 
-        if (i > 0 && (dimMinT - globalMaxT > SMALL_EPSILON || globalMinT - dimMaxT > SMALL_EPSILON)) {
+        if (usedDimensions > 0 && (dimMinT - globalMaxT > SMALL_EPSILON || globalMinT - dimMaxT > SMALL_EPSILON)) {
             return false;
         }
 
         globalMinT = std::max(globalMinT, dimMinT);
         globalMaxT = std::min(globalMaxT, dimMaxT);
         didIntersect = true;
+        ++usedDimensions;
     }
 
     if (!didIntersect) {
@@ -80,5 +77,14 @@ bool Box::Trace(const class SceneObject* parentObject, class Ray* inputRay, stru
     if (globalMinT - inputRay->GetMaxT() > SMALL_EPSILON || globalMaxT < SMALL_EPSILON) {
         return false;
     }
+
+    // WARNING: Ray-Box intersection doesn't isn't as well supported as ray-triangle intersection. This bit is kinda hacky atm.
+    if (outputIntersection) {
+        outputIntersection->intersectionRay = *inputRay;
+        outputIntersection->primitiveParent = parentObject;
+        outputIntersection->intersectionT = (globalMinT > SMALL_EPSILON) ? globalMinT : globalMaxT;
+        outputIntersection->hasIntersection = true;
+    }
+
     return true;
 }

@@ -23,13 +23,7 @@ void LoadFaceIntoPrimitive(unsigned int numVertices, unsigned int* indices, Prim
 {
     assert(numVertices == primitive.GetTotalVertices());
     bool hasNormals = allNormals.size() == allPosition.size();
-    if (!hasNormals) {
-        std::cerr << "WARNING: The mesh you are loading does not have normals specified. Normals will be estimated at runtime." << std::endl;
-    }
     bool hasUV = allUV.size() == allPosition.size();
-    if (!hasUV) {
-        std::cerr << "WARNING: The mesh you are loading does not have UVs specified. Expect wrong results when using textures." << std::endl;
-    }
 
     for (unsigned int i = 0; i < numVertices; ++i) {
         primitive.SetVertexPosition(i, allPosition[indices[i]]);
