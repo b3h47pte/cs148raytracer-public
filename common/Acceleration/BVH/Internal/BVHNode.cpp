@@ -5,7 +5,7 @@
 BVHNode::BVHNode(std::vector<std::shared_ptr<AccelerationNode>>& childObjects, int maximumChildren, int nodesOnLeaves, int splitDim):
     isLeafNode(false)
 {
-    if (childObjects.size() <= nodesOnLeaves) {
+    if (static_cast<int>(childObjects.size()) <= nodesOnLeaves) {
         CreateLeafNode(childObjects);
     } else {
         CreateParentNode(childObjects, maximumChildren, nodesOnLeaves, splitDim);
@@ -24,7 +24,7 @@ void BVHNode::CreateLeafNode(std::vector<std::shared_ptr<class AccelerationNode>
 void BVHNode::CreateParentNode(std::vector<std::shared_ptr<class AccelerationNode>>& childObjects, int maximumChildren, int nodesOnLeaves, int splitDim)
 {
     // Sort nodes based on their positions using the current dimension.
-    std::sort(childObjects.begin(), childObjects.end(), [=](std::shared_ptr<AccelerationNode>& a, std::shared_ptr<AccelerationNode>& b) {
+    std::sort(childObjects.begin(), childObjects.end(), [=](const std::shared_ptr<AccelerationNode>& a, const std::shared_ptr<AccelerationNode>& b) {
         return (a->GetBoundingBox().Center()[splitDim] < b->GetBoundingBox().Center()[splitDim]);
     });
 
