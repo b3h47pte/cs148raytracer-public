@@ -9,6 +9,9 @@
 #include <cmath>
 #include <array>
 #include <functional>
+#include <sstream>
+#include <stdint.h>
+#include <unordered_map>
 
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"

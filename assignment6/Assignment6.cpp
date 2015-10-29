@@ -38,7 +38,17 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
     std::shared_ptr<Light> pointLight = std::make_shared<PointLight>();
     pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
     pointLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
-    newScene->GenerateAccelerationData(AccelerationTypes::UNIFORM_GRID);
+
+#define ACCELERATION_TYPE 2
+#if ACCELERATION_TYPE == 0
+    newScene->GenerateAccelerationData(AccelerationTypes::NONE);
+#elif ACCELERATION_TYPE == 1
+    newScene->GenerateAccelerationData(AccelerationTypes::BVH);
+#else
+    UniformGridAcceleration* accelerator = dynamic_cast<UniformGridAcceleration*>(newScene->GenerateAccelerationData(AccelerationTypes::UNIFORM_GRID));
+    assert(accelerator);
+    accelerator->SetSuggestedGridSize(glm::ivec3(2, 2, 2));
+#endif    
     newScene->AddLight(pointLight);
 
     return newScene;
@@ -58,7 +68,6 @@ std::shared_ptr<class Renderer> Assignment6::CreateRenderer(std::shared_ptr<Scen
 
 int Assignment6::GetSamplesPerPixel() const
 {
-    // ASSIGNMENT 5 TODO: Change the '1' here to increase the maximum number of samples used per pixel. (Part 1).
     return 1;
 }
 

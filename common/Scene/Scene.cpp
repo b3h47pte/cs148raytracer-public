@@ -15,9 +15,10 @@ void Scene::GenerateDefaultAccelerationData()
     }
 }
 
-void Scene::GenerateAccelerationData(AccelerationTypes inputType)
+AccelerationStructure* Scene::GenerateAccelerationData(AccelerationTypes inputType)
 {
     acceleration = AccelerationGenerator::CreateStructureFromType(inputType);
+    return acceleration.get();
 }
 
 

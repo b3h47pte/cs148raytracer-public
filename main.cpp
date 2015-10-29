@@ -15,6 +15,12 @@
 #include "assignment8/Assignment8.h"
 #endif
 
+#ifdef _WIN32
+#define WAIT_ON_EXIT 0
+#else
+#define WAIT_ON_EXIT 0
+#endif
+
 int main(int argc, char** argv)  
 {
     std::unique_ptr<APPLICATION> currentApplication = make_unique<APPLICATION>();
@@ -26,7 +32,7 @@ int main(int argc, char** argv)
 
     DIAGNOSTICS_PRINT();
 
-#ifdef _WIN32
+#if defined(_WIN32) && WAIT_ON_EXIT
     int exit = 0;
     std::cin >> exit;
 #endif

@@ -28,7 +28,26 @@ float Ray::GetMaxT() const
     return maxT;
 }
 
+void Ray::SetMaxT(float input)
+{
+    maxT = input;
+}
+
 glm::vec3 Ray::GetRayPosition(float t) const
 {
     return glm::vec3(position) + t * rayDirection;
+}
+
+void Ray::SetRayMask(uint64_t objectId)
+{
+    traceMask[objectId] = true;
+}
+
+bool Ray::IsObjectMasked(uint64_t objectId) const
+{
+    try {
+        return traceMask.at(objectId);
+    } catch (...) {
+        return false;
+    }
 }

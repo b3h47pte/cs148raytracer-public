@@ -48,6 +48,9 @@ public:
     }
 
     virtual bool Trace(const SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const override;
+
+    virtual std::string GetHumanIdentifier() const override { return GetChildObjectNames(); }
+    std::string GetChildObjectNames() const;
 protected:
     Box boundingBox;
     static const float MINIMUM_SCALE;

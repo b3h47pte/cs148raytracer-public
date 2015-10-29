@@ -21,19 +21,18 @@ void UniformGridAcceleration::InternalInitialization()
         gridBoundingBox.IncludeBox(nodes[i]->GetBoundingBox());
     }
 
-    // Change grid size so that we are using square voxels.
     glm::vec3 gridDiagonal = gridBoundingBox.maxVertex - gridBoundingBox.minVertex;
-    float smallestVoxelSide = std::numeric_limits<float>::max();
     for (int i = 0; i < 3; ++i) {
-        smallestVoxelSide = std::min(smallestVoxelSide, gridDiagonal[i] / static_cast<float>(gridSize[i]));
+        if (std::abs(gridDiagonal[i]) < LARGE_EPSILON) {
+            // Arbitrary Expansion
+            gridBoundingBox.maxVertex[i] += 0.1f;
+            gridBoundingBox.minVertex[i] -= 0.1f;
+        }
     }
-    
-    const glm::ivec3 suggestedGridSize = gridSize;
-    for (int i = 0; i < 3; ++i) {
-        gridSize[i] = static_cast<int>(std::ceil(gridDiagonal[i] / smallestVoxelSide)) + 1;
-    }
-    DIAGNOSTICS_LOG("Final Uniform Grid Size: " + glm::to_string(gridSize) + " from Suggested: " + glm::to_string(suggestedGridSize));
-    voxelGrid = make_unique<VoxelGrid>(gridBoundingBox, gridSize, smallestVoxelSide);
+    gridDiagonal = gridBoundingBox.maxVertex - gridBoundingBox.minVertex;
+
+    glm::vec3 voxelSize = gridDiagonal / glm::vec3(gridSize);
+    voxelGrid = make_unique<VoxelGrid>(gridBoundingBox, gridSize, voxelSize);
 
     for (size_t i = 0; i < nodes.size(); ++i) {
         voxelGrid->AddNodeToGrid(nodes[i]);

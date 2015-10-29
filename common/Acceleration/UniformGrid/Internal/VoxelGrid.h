@@ -8,13 +8,14 @@
 class VoxelGrid : public std::enable_shared_from_this<VoxelGrid>
 {
 public:
-    VoxelGrid(Box inputBox, const glm::ivec3& size, float inputSize);
+    VoxelGrid(Box inputBox, const glm::ivec3& size, const glm::vec3& inputSize);
 
     void AddNodeToGrid(std::shared_ptr<class AccelerationNode> node);
     bool Trace(const class SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection);
 private:
     bool IsInsideGrid(const glm::ivec3& index) const;
     glm::ivec3 GetVoxelForPosition(const glm::vec3& position) const;
+    void FindClosestVoxelSide(int& dim, float& t, const glm::ivec3& currentVoxelIndex, const glm::ivec3& step, const glm::vec3& rayPos, const glm::vec3& rayDir) const;
 
     Box boundingBox;
     glm::ivec3 gridSize;
