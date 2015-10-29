@@ -91,29 +91,27 @@ bool VoxelGrid::Trace(const SceneObject* parentObject, Ray* inputRay, Intersecti
     std::cout << "Voxel Size: " << glm::to_string(voxelSize) << std::endl;
 #endif
     while (IsInsideGrid(currentVoxelIndex)) {
-        try {
 #if DEBUG_VOXEL_GRID
-            std::cout << "Trace Voxel: " << glm::to_string(currentVoxelIndex) << std::endl;
+        std::cout << "Trace Voxel: " << glm::to_string(currentVoxelIndex) << std::endl;
 #endif
-            IntersectionState tempIntersection;
-            tempIntersection.TestAndCopyLimits(outputIntersection);
-
-            bool hitVoxel = grid.at(currentVoxelIndex[0]).at(currentVoxelIndex[1]).at(currentVoxelIndex[2]).Trace(parentObject, inputRay, &tempIntersection);
-            // Need to verify that the hit position is within the voxel -- otherwise we're looking too far ahead.
-            const glm::vec3 hitPosition = rayPos + rayDir * tempIntersection.intersectionT;
+        IntersectionState tempIntersection;
+        tempIntersection.TestAndCopyLimits(outputIntersection);
+        bool hitVoxel = grid[currentVoxelIndex[0]][currentVoxelIndex[1]][currentVoxelIndex[2]].Trace(parentObject, inputRay, &tempIntersection);
+            
+        // Need to verify that the hit position is within the voxel -- otherwise we're looking too far ahead.
+        const glm::vec3 hitPosition = rayPos + rayDir * tempIntersection.intersectionT;
 #if DEBUG_VOXEL_GRID
-            std::cout << "  -- hit position " << glm::to_string(hitPosition) << " " << glm::to_string(GetVoxelForPosition(hitPosition)) << std::endl;
+        std::cout << "  -- hit position " << glm::to_string(hitPosition) << " " << glm::to_string(GetVoxelForPosition(hitPosition)) << std::endl;
 #endif
-            if (hitVoxel && GetVoxelForPosition(hitPosition) == currentVoxelIndex)  {
-                if (outputIntersection) {
-                    *outputIntersection = tempIntersection;
-                }
-#if DEBUG_VOXEL_GRID
-                std::cout << " did done hit" << std::endl;
-#endif
-                return true;
+        if (hitVoxel && GetVoxelForPosition(hitPosition) == currentVoxelIndex)  {
+            if (outputIntersection) {
+                *outputIntersection = tempIntersection;
             }
-        } catch (...) {}
+#if DEBUG_VOXEL_GRID
+            std::cout << " did done hit" << std::endl;
+#endif
+            return true;
+        }
 
         int minIndex = 0;
         float minTMax = 0.f;

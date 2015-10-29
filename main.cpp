@@ -16,7 +16,7 @@
 #endif
 
 #ifdef _WIN32
-#define WAIT_ON_EXIT 0
+#define WAIT_ON_EXIT 1
 #else
 #define WAIT_ON_EXIT 0
 #endif
