@@ -43,11 +43,7 @@ void Ray::SetRayMask(uint64_t objectId)
     traceMask[objectId] = true;
 }
 
-bool Ray::IsObjectMasked(uint64_t objectId) const
+bool Ray::IsObjectMasked(uint64_t objectId)
 {
-    try {
-        return traceMask.at(objectId);
-    } catch (...) {
-        return false;
-    }
+    return traceMask[objectId];
 }

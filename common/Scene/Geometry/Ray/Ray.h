@@ -17,7 +17,7 @@ public:
     void SetMaxT(float input);
 
     void SetRayMask(uint64_t objectId);
-    bool IsObjectMasked(uint64_t objectId) const;
+    bool IsObjectMasked(uint64_t objectId);
 private:
     glm::vec3 rayDirection;
     float maxT;
