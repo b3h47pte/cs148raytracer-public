@@ -61,7 +61,7 @@ void RayTracer::Run()
                 // Use the intersection data to compute the BRDF response.
                 glm::vec3 sampleColor;
                 if (didHitScene) {
-                    sampleColor = currentRenderer->ComputeSampleColor(rayIntersection, *cameraRay.get());
+                    //sampleColor = currentRenderer->ComputeSampleColor(rayIntersection, *cameraRay.get());
                 }
 
                 return sampleColor;

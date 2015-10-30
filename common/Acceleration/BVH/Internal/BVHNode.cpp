@@ -50,7 +50,8 @@ void BVHNode::CreateParentNode(std::vector<std::shared_ptr<class AccelerationNod
 
 bool BVHNode::Trace(const class SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const
 {
-    if (!boundingBox.Trace(parentObject, inputRay, nullptr)) {
+    IntersectionState state;
+    if (!boundingBox.Trace(parentObject, inputRay, &state)) {
         return false;
     }
 
@@ -85,4 +86,19 @@ void BVHNode::MergeTemporaryIntersectionToOutput(const IntersectionState& tempor
     }
 
     *outputIntersection = temporaryIntersection;
+}
+
+std::string BVHNode::PrintContents() const
+{
+    std::ostringstream ss;
+    if (isLeafNode) {
+        for (size_t i = 0; i < leafNodes.size(); ++i) {
+            ss << leafNodes[i]->GetHumanIdentifier() << "\t";
+        }
+    } else {
+        for (size_t i = 0; i < childBVHNodes.size(); ++i) {
+            ss << childBVHNodes[i]->PrintContents() << "\t";
+        }
+    }
+    return ss.str();
 }

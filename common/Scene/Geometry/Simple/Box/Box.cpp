@@ -50,6 +50,10 @@ bool Box::Trace(const class SceneObject* parentObject, class Ray* inputRay, stru
     bool didIntersect = false;
     for (int i = 0; i < 3; ++i) {
         if (std::abs(rayDir[i]) < SMALL_EPSILON) {
+            // If we're not moving in this direction then we should already be within the specified by range.
+            if (rayPos[i] - minVertex[i] < SMALL_EPSILON || rayPos[i] - maxVertex[i] > SMALL_EPSILON) {
+                return false;
+            }
             continue;
         }
 

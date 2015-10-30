@@ -4,7 +4,7 @@
 #include "common/Intersection/IntersectionState.h"
 
 BVHAcceleration::BVHAcceleration():
-    maximumChildren(2), nodesOnLeaves(2)
+    maximumChildren(2), nodesOnLeaves(1)
 {
 }
 
