@@ -6,12 +6,12 @@
 struct IntersectionState
 {
     IntersectionState() :
-        remainingReflectionBounces(0), remainingRefractionBounces(0), hasIntersection(false)
+        reflectionIntersection(nullptr), remainingReflectionBounces(0), refractionIntersection(nullptr), remainingRefractionBounces(0), hasIntersection(false), currentIOR(1.f)
     {
     }
 
     IntersectionState(int reflectionBounces, int refractionBounces) :
-        remainingReflectionBounces(reflectionBounces), remainingRefractionBounces(refractionBounces), hasIntersection(false)
+        reflectionIntersection(nullptr), remainingReflectionBounces(reflectionBounces), refractionIntersection(nullptr), remainingRefractionBounces(refractionBounces), hasIntersection(false), currentIOR(1.f)
     {
     }
 
@@ -24,7 +24,10 @@ struct IntersectionState
         remainingRefractionBounces = state->remainingRefractionBounces;
     }
 
+    std::shared_ptr<struct IntersectionState> reflectionIntersection;
     int remainingReflectionBounces;
+
+    std::shared_ptr<struct IntersectionState> refractionIntersection;
     int remainingRefractionBounces;
 
     const class PrimitiveBase* intersectedPrimitive;
@@ -32,6 +35,7 @@ struct IntersectionState
     Ray intersectionRay;
     float intersectionT;
     bool hasIntersection;
+    float currentIOR;
 
     // One for each vertex
     std::vector<float> primitiveIntersectionWeights;

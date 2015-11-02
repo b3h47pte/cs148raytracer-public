@@ -47,3 +47,16 @@ bool Ray::IsObjectMasked(uint64_t objectId)
 {
     return traceMask[objectId];
 }
+
+glm::vec3 Ray::RefractRay(const glm::vec3& normal, float n1, float n2) const
+{
+    const float eta = n1 / n2;
+    const float cosTheta1 = std::abs(glm::dot(normal, GetRayDirection()));
+    const float tirCheck = std::pow(eta, 2.f) * (1.f - std::pow(cosTheta1, 2.f));
+    if (tirCheck - 1.f > SMALL_EPSILON) {
+        return glm::reflect(GetRayDirection(), normal);
+    }
+    const float cosTheta2 = std::sqrt(1.f - tirCheck);
+    const glm::vec3 refractionDir = eta * GetRayDirection() + (eta * cosTheta1 - cosTheta2) * normal;
+    return refractionDir;
+}

@@ -18,6 +18,8 @@ public:
 
     void SetRayMask(uint64_t objectId);
     bool IsObjectMasked(uint64_t objectId);
+
+    glm::vec3 RefractRay(const glm::vec3& normal, float n1, float n2) const;
 private:
     glm::vec3 rayDirection;
     float maxT;

@@ -10,7 +10,7 @@ class AccelerationNode
 public:
     AccelerationNode();
 
-    virtual Box GetBoundingBox() = 0;
+    virtual Box GetBoundingBox() const = 0;
     virtual bool Trace(const class SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const = 0;
     virtual uint64_t GetUniqueId() const { return uniqueId; }
     virtual std::string GetHumanIdentifier() const { return ""; }

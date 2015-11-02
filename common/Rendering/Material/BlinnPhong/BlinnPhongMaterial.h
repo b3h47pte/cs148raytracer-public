@@ -6,7 +6,6 @@ class BlinnPhongMaterial : public Material
 {
 public:
     BlinnPhongMaterial();
-    virtual glm::vec3 ComputeBRDF(const struct IntersectionState& IntersectionState, const class Light& relevantLight, const class Ray& toLightRay, const class Ray& fromCameraRay) const; 
 
     void SetDiffuse(glm::vec3 input);
     void SetSpecular(glm::vec3 inputColor, float inputShininess);
@@ -14,6 +13,11 @@ public:
     virtual std::shared_ptr<Material> Clone() const;
 
     virtual void LoadMaterialFromAssimp(std::shared_ptr<struct aiMaterial> assimpMaterial);
+
+protected:
+    virtual glm::vec3 ComputeDiffuse(const struct IntersectionState& intersection, const glm::vec3& lightColor, const float NdL, const float NdH, const float NdV, const float VdH) const override;
+    virtual glm::vec3 ComputeSpecular(const struct IntersectionState& intersection, const glm::vec3& lightColor, const float NdL, const float NdH, const float NdV, const float VdH) const override;
+
 private:
     glm::vec3 diffuseColor;
     glm::vec3 specularColor;

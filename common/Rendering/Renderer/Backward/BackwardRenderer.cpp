@@ -1,4 +1,4 @@
-#include "common/Rendering/Renderer/Forward/ForwardRenderer.h"
+#include "common/Rendering/Renderer/Backward/BackwardRenderer.h"
 #include "common/Scene/Scene.h"
 #include "common/Sampling/ColorSampler.h"
 #include "common/Scene/Lights/Light.h"
@@ -7,16 +7,16 @@
 #include "common/Rendering/Material/Material.h"
 #include "common/Intersection/IntersectionState.h"
 
-ForwardRenderer::ForwardRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<ColorSampler> sampler) :
+BackwardRenderer::BackwardRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<ColorSampler> sampler) :
     Renderer(scene, sampler)
 {
 }
 
-void ForwardRenderer::InitializeRenderer()
+void BackwardRenderer::InitializeRenderer()
 {
 }
 
-glm::vec3 ForwardRenderer::ComputeSampleColor(const IntersectionState& intersection, const Ray& fromCameraRay) const
+glm::vec3 BackwardRenderer::ComputeSampleColor(const IntersectionState& intersection, const Ray& fromCameraRay) const
 {
     if (!intersection.hasIntersection) {
         return glm::vec3();
@@ -47,10 +47,10 @@ glm::vec3 ForwardRenderer::ComputeSampleColor(const IntersectionState& intersect
             const float lightAttenuation = light->ComputeLightAttenuation(intersectionPoint);
 
             // Note that the material should compute the parts of the lighting equation too.
-            const glm::vec3 brdfResponse = objectMaterial->ComputeBRDF(intersection, *light, sampleRays[s], fromCameraRay);
-            sampleColor += brdfResponse * lightAttenuation;
+            const glm::vec3 brdfResponse = objectMaterial->ComputeBRDF(intersection, *light, sampleRays[s], fromCameraRay, lightAttenuation);
+            sampleColor += brdfResponse;
         }
     }
-
+    sampleColor += objectMaterial->ComputeNonLightDependentBRDF(this, intersection);
     return sampleColor;
 }

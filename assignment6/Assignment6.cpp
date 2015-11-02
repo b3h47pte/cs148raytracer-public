@@ -18,10 +18,11 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
     std::shared_ptr<BlinnPhongMaterial> cubeMaterial = std::make_shared<BlinnPhongMaterial>();
     cubeMaterial->SetDiffuse(glm::vec3(1.f, 1.f, 1.f));
     cubeMaterial->SetSpecular(glm::vec3(0.6f, 0.6f, 0.6f), 40.f);
+    cubeMaterial->SetReflectivity(0.3f);
 
     // Objects
     std::vector<std::shared_ptr<aiMaterial>> loadedMaterials;
-    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Original.obj", &loadedMaterials);
+    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Assignment6.obj", &loadedMaterials);
     for (size_t i = 0; i < cubeObjects.size(); ++i) {
         std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
         materialCopy->LoadMaterialFromAssimp(loadedMaterials[i]);
@@ -39,7 +40,8 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
     pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
     pointLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
 
-#define ACCELERATION_TYPE 2
+
+#define ACCELERATION_TYPE 1
 #if ACCELERATION_TYPE == 0
     newScene->GenerateAccelerationData(AccelerationTypes::NONE);
 #elif ACCELERATION_TYPE == 1
@@ -63,7 +65,7 @@ std::shared_ptr<ColorSampler> Assignment6::CreateSampler() const
 
 std::shared_ptr<class Renderer> Assignment6::CreateRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<ColorSampler> sampler) const
 {
-    return std::make_shared<ForwardRenderer>(scene, sampler);
+    return std::make_shared<BackwardRenderer>(scene, sampler);
 }
 
 int Assignment6::GetSamplesPerPixel() const
@@ -78,12 +80,12 @@ bool Assignment6::NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleInd
 
 int Assignment6::GetMaxReflectionBounces() const
 {
-    return 0;
+    return 1;
 }
 
 int Assignment6::GetMaxRefractionBounces() const
 {
-    return 0;
+    return 4;
 }
 
 glm::vec2 Assignment6::GetImageOutputResolution() const

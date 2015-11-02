@@ -61,12 +61,16 @@ bool BVHNode::Trace(const class SceneObject* parentObject, class Ray* inputRay, 
     if (isLeafNode) {
         for (size_t i = 0; i < leafNodes.size(); ++i) {
             IntersectionState temporaryIntersection;
+            temporaryIntersection.TestAndCopyLimits(outputIntersection);
+
             hitObject |= leafNodes[i]->Trace(parentObject, inputRay, &temporaryIntersection);
             MergeTemporaryIntersectionToOutput(temporaryIntersection, outputIntersection);
         }
     } else {
         for (size_t i = 0; i < childBVHNodes.size(); ++i) {
             IntersectionState temporaryIntersection;
+            temporaryIntersection.TestAndCopyLimits(outputIntersection);
+
             hitObject |= childBVHNodes[i]->Trace(parentObject, inputRay, &temporaryIntersection);
             MergeTemporaryIntersectionToOutput(temporaryIntersection, outputIntersection);
         }
@@ -84,7 +88,6 @@ void BVHNode::MergeTemporaryIntersectionToOutput(const IntersectionState& tempor
     if (outputIntersection->hasIntersection && temporaryIntersection.intersectionT - outputIntersection->intersectionT > SMALL_EPSILON) {
         return;
     }
-
     *outputIntersection = temporaryIntersection;
 }
 
