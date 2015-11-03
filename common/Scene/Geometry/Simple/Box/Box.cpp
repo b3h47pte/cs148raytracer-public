@@ -42,6 +42,9 @@ bool Box::Trace(const class SceneObject* parentObject, class Ray* inputRay, stru
     const glm::vec3 rayPos = glm::vec3(spaceTransform * inputRay->GetPosition());
     const glm::vec3 rayDir = glm::vec3(spaceTransform * inputRay->GetForwardDirection());
 
+    //std::cout << "Trace Box Ray: " << glm::to_string(rayPos) << " " << glm::to_string(rayDir) << std::endl;
+    //std::cout << "  Box: " << glm::to_string(minVertex) << " " << glm::to_string(maxVertex) << std::endl;
+
     float globalMinT = std::numeric_limits<float>::lowest();
     float globalMaxT = std::numeric_limits<float>::max();
 
@@ -84,10 +87,10 @@ bool Box::Trace(const class SceneObject* parentObject, class Ray* inputRay, stru
 
     // WARNING: Ray-Box intersection isn't as well supported as ray-triangle intersection. This bit is kinda hacky atm.
     if (outputIntersection) {
-        outputIntersection->intersectionRay = *inputRay;
-        outputIntersection->primitiveParent = parentObject;
+        if (globalMinT - outputIntersection->intersectionT > SMALL_EPSILON) {
+            return false;
+        }
         outputIntersection->intersectionT = (globalMinT > SMALL_EPSILON) ? globalMinT : globalMaxT;
-        outputIntersection->hasIntersection = true;
     }
 
     return true;

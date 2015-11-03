@@ -6,7 +6,7 @@
 const float SceneObject::MINIMUM_SCALE = 0.01f;
 
 SceneObject::SceneObject():
-    worldToObjectMatrix(1.f), objectToWorldMatrix(1.f), position(0.f, 0.f, 0.f, 1.f), rotation(1.f, 0.f, 0.f, 0.f), scale(1.f)
+    worldToObjectMatrix(1.f), objectToWorldMatrix(1.f), position(0.f, 0.f, 0.f, 1.f), rotation(1.f, 0.f, 0.f, 0.f), scale(1.f), nameSet(false)
 {
 }
 
@@ -158,4 +158,18 @@ std::string SceneObject::GetChildObjectNames() const
         oss << childObjects[i]->GetName() << "\t";
     }
     return oss.str();
+}
+
+std::string SceneObject::GetHumanIdentifier() const
+{
+    if (nameSet) {
+        return objectName;
+    }
+    return GetChildObjectNames();
+}
+
+void SceneObject::SetName(const std::string& input)
+{
+    nameSet = true;
+    objectName = input;
 }

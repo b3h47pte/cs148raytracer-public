@@ -28,6 +28,7 @@ AccelerationStructure* Scene::GenerateAccelerationData(AccelerationTypes inputTy
 bool Scene::Trace(class Ray* inputRay, IntersectionState* outputIntersection) const
 {
     assert(inputRay);
+    DIAGNOSTICS_STAT(DiagnosticsType::RAYS_CREATED);
 
     bool didIntersect = acceleration->Trace(nullptr, inputRay, outputIntersection);
     if (outputIntersection != nullptr && didIntersect) {
@@ -37,12 +38,13 @@ bool Scene::Trace(class Ray* inputRay, IntersectionState* outputIntersection) co
         assert(currentMaterial);
 
         const glm::vec3 intersectionPoint = outputIntersection->intersectionRay.GetRayPosition(outputIntersection->intersectionT);
-
+        const float NdR = glm::dot(inputRay->GetRayDirection(), outputIntersection->ComputeNormal());
         // send out reflection ray.
         if (currentMaterial->IsReflective() && outputIntersection->remainingReflectionBounces > 0) {
             outputIntersection->reflectionIntersection = std::make_shared<IntersectionState>(outputIntersection->remainingReflectionBounces - 1, outputIntersection->remainingRefractionBounces);
 
-            const glm::vec3 reflectionDir = glm::reflect(inputRay->GetRayDirection(), outputIntersection->ComputeNormal());
+            const glm::vec3 normal = (NdR > SMALL_EPSILON) ? -1.f * outputIntersection->ComputeNormal(): outputIntersection->ComputeNormal();
+            const glm::vec3 reflectionDir = glm::reflect(inputRay->GetRayDirection(), normal);
             Ray reflectionRay(intersectionPoint + reflectionDir * LARGE_EPSILON, reflectionDir);
             Trace(&reflectionRay, outputIntersection->reflectionIntersection.get());
         }
@@ -52,9 +54,9 @@ bool Scene::Trace(class Ray* inputRay, IntersectionState* outputIntersection) co
             outputIntersection->refractionIntersection = std::make_shared<IntersectionState>(outputIntersection->remainingReflectionBounces, outputIntersection->remainingRefractionBounces - 1);
 
             // If we're going into the mesh, set the target IOR to be the IOR of the mesh.
-            const float NdR = glm::dot(inputRay->GetRayDirection(), outputIntersection->ComputeNormal());
-            const float targetIOR = (NdR < SMALL_EPSILON) ? currentMaterial->GetIOR() : 1.f;
+            float targetIOR = (NdR < SMALL_EPSILON) ? currentMaterial->GetIOR() : 1.f;
             const glm::vec3 refractionDir = inputRay->RefractRay(outputIntersection->ComputeNormal(), outputIntersection->currentIOR, targetIOR);
+            outputIntersection->refractionIntersection->currentIOR = targetIOR;
 
             Ray refractionRay(intersectionPoint + refractionDir * LARGE_EPSILON, refractionDir);
             Trace(&refractionRay, outputIntersection->refractionIntersection.get());

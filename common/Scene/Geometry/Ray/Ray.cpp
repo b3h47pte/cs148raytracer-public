@@ -3,7 +3,6 @@
 Ray::Ray() :
     rayDirection(glm::vec3(0.f, 0.f, -1.f)), maxT(std::numeric_limits<float>::max())
 {
-    DIAGNOSTICS_STAT(DiagnosticsType::RAYS_CREATED);
     position = glm::vec4(0.f, 0.f, 0.f, 1.f);
 }
 
@@ -48,13 +47,15 @@ bool Ray::IsObjectMasked(uint64_t objectId)
     return traceMask[objectId];
 }
 
-glm::vec3 Ray::RefractRay(const glm::vec3& normal, float n1, float n2) const
+glm::vec3 Ray::RefractRay(const glm::vec3& normal, float n1, float& n2) const
 {
     const float eta = n1 / n2;
-    const float cosTheta1 = std::abs(glm::dot(normal, GetRayDirection()));
+    const float NdI = glm::dot(normal, GetRayDirection());
+    const float cosTheta1 = std::abs(NdI);
     const float tirCheck = std::pow(eta, 2.f) * (1.f - std::pow(cosTheta1, 2.f));
     if (tirCheck - 1.f > SMALL_EPSILON) {
-        return glm::reflect(GetRayDirection(), normal);
+        n2 = n1;
+        return glm::reflect(GetRayDirection(), (NdI > SMALL_EPSILON) ? -1.f * normal : normal);
     }
     const float cosTheta2 = std::sqrt(1.f - tirCheck);
     const glm::vec3 refractionDir = eta * GetRayDirection() + (eta * cosTheta1 - cosTheta2) * normal;

@@ -16,7 +16,9 @@ bool UniformGridAcceleration::Trace(const SceneObject* parentObject, Ray* inputR
 void UniformGridAcceleration::InternalInitialization()
 {
     Box gridBoundingBox;
+#if !DISABLE_ACCELERATION_CREATION_TIMER
     DIAGNOSTICS_TIMER(timer, "Uniform Grid Creation Time");
+#endif
     for (size_t i = 0; i < nodes.size(); ++i) {
         gridBoundingBox.IncludeBox(nodes[i]->GetBoundingBox());
     }

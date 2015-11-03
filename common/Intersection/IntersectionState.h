@@ -6,12 +6,12 @@
 struct IntersectionState
 {
     IntersectionState() :
-        reflectionIntersection(nullptr), remainingReflectionBounces(0), refractionIntersection(nullptr), remainingRefractionBounces(0), hasIntersection(false), currentIOR(1.f)
+        reflectionIntersection(nullptr), remainingReflectionBounces(0), refractionIntersection(nullptr), remainingRefractionBounces(0), intersectionT(std::numeric_limits<float>::max()), hasIntersection(false), currentIOR(1.f)
     {
     }
 
     IntersectionState(int reflectionBounces, int refractionBounces) :
-        reflectionIntersection(nullptr), remainingReflectionBounces(reflectionBounces), refractionIntersection(nullptr), remainingRefractionBounces(refractionBounces), hasIntersection(false), currentIOR(1.f)
+        reflectionIntersection(nullptr), remainingReflectionBounces(reflectionBounces), refractionIntersection(nullptr), remainingRefractionBounces(refractionBounces), intersectionT(std::numeric_limits<float>::max()), hasIntersection(false), currentIOR(1.f)
     {
     }
 
@@ -22,6 +22,7 @@ struct IntersectionState
         }
         remainingReflectionBounces = state->remainingReflectionBounces;
         remainingRefractionBounces = state->remainingRefractionBounces;
+        intersectionT = state->intersectionT;
     }
 
     std::shared_ptr<struct IntersectionState> reflectionIntersection;

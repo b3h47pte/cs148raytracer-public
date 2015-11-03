@@ -30,6 +30,7 @@ const float SMALL_EPSILON = 1e-7f;
 
 #define STRINGIFY_HELPER(x) #x
 #define STRINGIFY(x) STRINGIFY_HELPER(x)
+#define DISABLE_ACCELERATION_CREATION_TIMER 1
 
 
 #ifdef _WIN32
