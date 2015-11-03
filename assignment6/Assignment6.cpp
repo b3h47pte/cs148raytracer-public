@@ -31,7 +31,7 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
         std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
         cubeSceneObject->AddMeshObject(cubeObjects[i]);
         cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
-        cubeSceneObject->CreateAccelerationData(AccelerationTypes::BVH);
+        cubeSceneObject->CreateAccelerationData(AccelerationTypes::NONE);
         newScene->AddSceneObject(cubeSceneObject);
     }
 
@@ -40,7 +40,7 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
     pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
     pointLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
 
-
+// Assignment 6 Part 1 TODO: Change the '1' here.
 #define ACCELERATION_TYPE 1
 #if ACCELERATION_TYPE == 0
     newScene->GenerateAccelerationData(AccelerationTypes::NONE);
@@ -49,6 +49,7 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
 #else
     UniformGridAcceleration* accelerator = dynamic_cast<UniformGridAcceleration*>(newScene->GenerateAccelerationData(AccelerationTypes::UNIFORM_GRID));
     assert(accelerator);
+    // Assignment 6 Part 2 TODO: Change the glm::ivec3(10, 10, 10) here.
     accelerator->SetSuggestedGridSize(glm::ivec3(10, 10, 10));
 #endif    
     newScene->AddLight(pointLight);
@@ -80,7 +81,7 @@ bool Assignment6::NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleInd
 
 int Assignment6::GetMaxReflectionBounces() const
 {
-    return 1;
+    return 2;
 }
 
 int Assignment6::GetMaxRefractionBounces() const
