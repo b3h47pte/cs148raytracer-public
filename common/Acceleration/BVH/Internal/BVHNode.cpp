@@ -50,7 +50,8 @@ void BVHNode::CreateParentNode(std::vector<std::shared_ptr<class AccelerationNod
 
 bool BVHNode::Trace(const class SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const
 {
-    if (!boundingBox.Trace(parentObject, inputRay, nullptr)) {
+    IntersectionState state;
+    if (!boundingBox.Trace(parentObject, inputRay, &state)) {
         return false;
     }
 
@@ -60,12 +61,16 @@ bool BVHNode::Trace(const class SceneObject* parentObject, class Ray* inputRay, 
     if (isLeafNode) {
         for (size_t i = 0; i < leafNodes.size(); ++i) {
             IntersectionState temporaryIntersection;
+            temporaryIntersection.TestAndCopyLimits(outputIntersection);
+
             hitObject |= leafNodes[i]->Trace(parentObject, inputRay, &temporaryIntersection);
             MergeTemporaryIntersectionToOutput(temporaryIntersection, outputIntersection);
         }
     } else {
         for (size_t i = 0; i < childBVHNodes.size(); ++i) {
             IntersectionState temporaryIntersection;
+            temporaryIntersection.TestAndCopyLimits(outputIntersection);
+
             hitObject |= childBVHNodes[i]->Trace(parentObject, inputRay, &temporaryIntersection);
             MergeTemporaryIntersectionToOutput(temporaryIntersection, outputIntersection);
         }
@@ -83,6 +88,20 @@ void BVHNode::MergeTemporaryIntersectionToOutput(const IntersectionState& tempor
     if (outputIntersection->hasIntersection && temporaryIntersection.intersectionT - outputIntersection->intersectionT > SMALL_EPSILON) {
         return;
     }
-
     *outputIntersection = temporaryIntersection;
+}
+
+std::string BVHNode::PrintContents() const
+{
+    std::ostringstream ss;
+    if (isLeafNode) {
+        for (size_t i = 0; i < leafNodes.size(); ++i) {
+            ss << leafNodes[i]->GetHumanIdentifier() << "\t";
+        }
+    } else {
+        for (size_t i = 0; i < childBVHNodes.size(); ++i) {
+            ss << childBVHNodes[i]->PrintContents() << "\t";
+        }
+    }
+    return ss.str();
 }

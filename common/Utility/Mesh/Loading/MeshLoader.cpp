@@ -9,7 +9,7 @@
 #include "assimp/mesh.h"
 #include "common/Scene/Geometry/Primitives/Primitive.h"
 #include <map>
-
+#include <queue>
 
 namespace MeshLoader
 {
@@ -23,13 +23,7 @@ void LoadFaceIntoPrimitive(unsigned int numVertices, unsigned int* indices, Prim
 {
     assert(numVertices == primitive.GetTotalVertices());
     bool hasNormals = allNormals.size() == allPosition.size();
-    if (!hasNormals) {
-        std::cerr << "WARNING: The mesh you are loading does not have normals specified. Normals will be estimated at runtime." << std::endl;
-    }
     bool hasUV = allUV.size() == allPosition.size();
-    if (!hasUV) {
-        std::cerr << "WARNING: The mesh you are loading does not have UVs specified. Expect wrong results when using textures." << std::endl;
-    }
 
     for (unsigned int i = 0; i < numVertices; ++i) {
         primitive.SetVertexPosition(i, allPosition[indices[i]]);
@@ -87,7 +81,6 @@ std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, s
             continue;
         }
         std::shared_ptr<MeshObject> newMesh = std::make_shared<MeshObject>();
-
         auto totalVertices = mesh->mNumVertices;
         std::vector<glm::vec3> allPosition(totalVertices);
         std::vector<glm::vec3> allNormals;
@@ -143,6 +136,25 @@ std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, s
             outputMaterials->push_back(sceneMaterials[mesh->mMaterialIndex]);
         }
     }
+
+    // Traverse nodes to set mesh names
+    std::queue<aiNode*> nodes;
+    nodes.push(scene->mRootNode);
+    while (!nodes.empty()) {
+        aiNode* currentNode = nodes.front();
+        nodes.pop();
+
+        if (currentNode->mNumMeshes) {
+            for (unsigned int i = 0; i < currentNode->mNumMeshes; ++i) {
+                loadedMeshes[currentNode->mMeshes[i]]->SetName(currentNode->mName.C_Str());
+            }
+        }
+
+        for (unsigned int i = 0; i < currentNode->mNumChildren; ++i) {
+            nodes.push(currentNode->mChildren[i]);
+        }
+    }
+
     return loadedMeshes;
 }
 

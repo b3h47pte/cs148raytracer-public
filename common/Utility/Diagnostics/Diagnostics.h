@@ -13,6 +13,9 @@ enum class DiagnosticsType
 #if DIAGNOSTICS_ON
 #define DIAGNOSTICS_STAT(t) Diagnostics::Get()->IncrementStat(t)
 #define DIAGNOSTICS_PRINT() Diagnostics::Get()->Print()
+#define DIAGNOSTICS_TIMER(N,D) Timer N(D)
+#define DIAGNOSTICS_END_TIMER(N) N.Tock()
+#define DIAGNOSTICS_LOG(S) Diagnostics::Get()->Log(S)
 
 #include <memory>
 #include <map>
@@ -26,6 +29,7 @@ public:
 
     void IncrementStat(DiagnosticsType type);
     void Print();
+    void Log(const std::string& log);
 private:
 
     std::map<DiagnosticsType, int> statisticsAggregator;
@@ -34,4 +38,7 @@ private:
 #else
 #define DIAGNOSTICS_STAT(t)
 #define DIAGNOSTICS_PRINT
+#define DIAGNOSTICS_TIMER(N,D)
+#define DIAGNOSTICS_END_TIMER(N)
+#define DIAGNOSTICS_LOG(S)
 #endif

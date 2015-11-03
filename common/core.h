@@ -13,4 +13,4 @@
 #include "common/Rendering/Material/BlinnPhong/BlinnPhongMaterial.h"
 #include "common/Utility/Mesh/Loading/MeshLoader.h"
 #include "common/Rendering/Renderer.h"
-#include "common/Rendering/Renderer/Forward/ForwardRenderer.h"
+#include "common/Rendering/Renderer/Backward/BackwardRenderer.h"

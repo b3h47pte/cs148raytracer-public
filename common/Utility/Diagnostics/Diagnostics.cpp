@@ -18,6 +18,11 @@ void Diagnostics::IncrementStat(DiagnosticsType type)
     ++statisticsAggregator[type];
 }
 
+void Diagnostics::Log(const std::string& log)
+{
+    std::cout << log << std::endl;
+}
+
 void Diagnostics::Print()
 {
     std::cout << "====================== DIAGNOSTICS START ======================" << std::endl;

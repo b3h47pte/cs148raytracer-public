@@ -11,11 +11,12 @@ public:
     virtual ~MeshObject();
     virtual void Finalize();
 
-
+    void SetName(const std::string& input);
+    std::string GetName() const { return meshName; }
     void AddPrimitive(std::shared_ptr<class PrimitiveBase> newPrimitive);
     virtual void CreateAccelerationData(AccelerationTypes perObjectType);
 
-    virtual Box GetBoundingBox() override
+    virtual Box GetBoundingBox() const override
     {
         return boundingBox;
     }
@@ -32,4 +33,5 @@ protected:
 
 private:
     std::shared_ptr<class Material> storedMaterial;
+    std::string meshName;
 };

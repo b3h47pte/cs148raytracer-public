@@ -55,3 +55,8 @@ void MeshObject::SetMaterial(std::shared_ptr<Material> inputMaterial)
 {
     storedMaterial = std::move(inputMaterial);
 }
+
+void MeshObject::SetName(const std::string& input)
+{
+    meshName = input;
+}

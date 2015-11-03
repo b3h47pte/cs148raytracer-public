@@ -49,7 +49,7 @@ public:
         UpdateBoundingBox();
     }
 
-    virtual Box GetBoundingBox() override
+    virtual Box GetBoundingBox() const override
     {
         return boundingBox;
     }

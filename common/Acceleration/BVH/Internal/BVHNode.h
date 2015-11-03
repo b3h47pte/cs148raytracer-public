@@ -12,6 +12,8 @@ private:
     void CreateLeafNode(std::vector<std::shared_ptr<class AccelerationNode>>& childObjects);
     void CreateParentNode(std::vector<std::shared_ptr<class AccelerationNode>>& childObjects, int maximumChildren, int nodesOnLeaves, int splitDim);
     void MergeTemporaryIntersectionToOutput(const struct IntersectionState& temporaryIntersection, struct IntersectionState* outputIntersection) const;
+    std::string PrintContents() const;
+
 
     std::vector<std::shared_ptr<BVHNode>> childBVHNodes;
     std::vector<std::shared_ptr<class AccelerationNode>> leafNodes;

@@ -4,7 +4,7 @@
 #include "common/Intersection/IntersectionState.h"
 
 BVHAcceleration::BVHAcceleration():
-    maximumChildren(2), nodesOnLeaves(2)
+    maximumChildren(2), nodesOnLeaves(1)
 {
 }
 
@@ -15,6 +15,7 @@ bool BVHAcceleration::Trace(const SceneObject* parentObject, Ray* inputRay, Inte
 
 void BVHAcceleration::InternalInitialization()
 {
+    DIAGNOSTICS_TIMER(timer, "BVH Creation Time");
     // maximum children shouldn't be less than nodes on leaves...
     if (maximumChildren < nodesOnLeaves) {
         std::cerr << "WARNING: Maximum children is less than nodes on leaves. Setting it equal." << std::endl;

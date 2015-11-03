@@ -13,6 +13,9 @@ namespace AccelerationGenerator
             case AccelerationTypes::BVH:
                 acceleration = make_unique<BVHAcceleration>();
                 break;
+            case AccelerationTypes::UNIFORM_GRID:
+                acceleration = make_unique<UniformGridAcceleration>();
+                break;
             default:
                 throw std::runtime_error("ERROR: Unsupported acceleration structure.");
                 break;

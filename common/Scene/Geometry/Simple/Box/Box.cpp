@@ -46,6 +46,7 @@ bool Box::Trace(const class SceneObject* parentObject, class Ray* inputRay, stru
     float globalMaxT = std::numeric_limits<float>::max();
 
     // Do intersection against slabs in the X, Y, and then Z direction. Make sure we are within the slabs for all three axes.
+    int usedDimensions = 0;
     bool didIntersect = false;
     for (int i = 0; i < 3; ++i) {
         if (std::abs(rayDir[i]) < SMALL_EPSILON) {
@@ -53,7 +54,6 @@ bool Box::Trace(const class SceneObject* parentObject, class Ray* inputRay, stru
             if (rayPos[i] - minVertex[i] < SMALL_EPSILON || rayPos[i] - maxVertex[i] > SMALL_EPSILON) {
                 return false;
             }
-
             continue;
         }
 
@@ -64,13 +64,14 @@ bool Box::Trace(const class SceneObject* parentObject, class Ray* inputRay, stru
             std::swap(dimMinT, dimMaxT);
         }
 
-        if (i > 0 && (dimMinT - globalMaxT > SMALL_EPSILON || globalMinT - dimMaxT > SMALL_EPSILON)) {
+        if (usedDimensions > 0 && (dimMinT - globalMaxT > SMALL_EPSILON || globalMinT - dimMaxT > SMALL_EPSILON)) {
             return false;
         }
 
         globalMinT = std::max(globalMinT, dimMinT);
         globalMaxT = std::min(globalMaxT, dimMaxT);
         didIntersect = true;
+        ++usedDimensions;
     }
 
     if (!didIntersect) {
@@ -80,5 +81,59 @@ bool Box::Trace(const class SceneObject* parentObject, class Ray* inputRay, stru
     if (globalMinT - inputRay->GetMaxT() > SMALL_EPSILON || globalMaxT < SMALL_EPSILON) {
         return false;
     }
+
+    // WARNING: Ray-Box intersection isn't as well supported as ray-triangle intersection. This bit is kinda hacky atm.
+    if (outputIntersection) {
+        outputIntersection->intersectionRay = *inputRay;
+        outputIntersection->primitiveParent = parentObject;
+        outputIntersection->intersectionT = (globalMinT > SMALL_EPSILON) ? globalMinT : globalMaxT;
+        outputIntersection->hasIntersection = true;
+    }
+
     return true;
+}
+
+Box Box::Expand(float delta) const
+{
+    Box newBoundingBox;
+    glm::vec3 diagonal = glm::normalize(maxVertex - minVertex);
+    newBoundingBox.maxVertex = maxVertex + delta * diagonal;
+    newBoundingBox.minVertex = minVertex - delta * diagonal;
+    return newBoundingBox;
+}
+
+Box Box::Transform(glm::mat4 transformation) const
+{
+    Box newBoundingBox;
+    std::vector<glm::vec3> corners;
+    Corners(corners);
+
+    for (size_t i = 0; i < corners.size(); ++i) {
+        glm::vec3 transformedCorner = glm::vec3(transformation * glm::vec4(corners[i], 1.f));
+        newBoundingBox.minVertex = glm::min(transformedCorner, newBoundingBox.minVertex);
+        newBoundingBox.maxVertex = glm::max(transformedCorner, newBoundingBox.maxVertex);
+    }
+
+    return newBoundingBox;
+}
+
+void Box::Corners(std::vector<glm::vec3>& corners) const
+{
+    corners.clear();
+    for (int i = 0; i < 2; ++i) {
+        float x = (i == 0) ? minVertex.x : maxVertex.x;
+        for (int j = 0; j < 2; ++j) {
+            float y = (j == 0) ? minVertex.y : maxVertex.y;
+            for (int k = 0; k < 2; ++k) {
+                float z = (k == 0) ? minVertex.z : maxVertex.z;
+                corners.emplace_back(x, y, z);
+            }
+        }
+    }
+}
+
+float Box::Volume() const
+{
+    glm::vec3 diagonal = maxVertex - minVertex;
+    return diagonal[0] * diagonal[1] * diagonal[2];
 }

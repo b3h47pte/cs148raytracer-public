@@ -119,11 +119,11 @@ void SceneObject::CreateDefaultAccelerationData()
 
 void SceneObject::CreateAccelerationData(AccelerationTypes perObjectType)
 {
-    acceleration = AccelerationGenerator::CreateStructureFromType(perObjectType);
-    assert(acceleration);
     for (size_t i = 0; i < childObjects.size(); ++i) {
         childObjects[i]->CreateAccelerationData(perObjectType);
     }
+    acceleration = AccelerationGenerator::CreateStructureFromType(perObjectType);
+    assert(acceleration);
 }
 
 void SceneObject::Finalize()
@@ -133,10 +133,7 @@ void SceneObject::Finalize()
         childObjects[i]->Finalize();
         boundingBox.IncludeBox(childObjects[i]->GetBoundingBox());
     }
-
-    // scene object is in world space 
-    boundingBox.minVertex = glm::vec3(objectToWorldMatrix * glm::vec4(boundingBox.minVertex, 1.f));
-    boundingBox.maxVertex = glm::vec3(objectToWorldMatrix * glm::vec4(boundingBox.maxVertex, 1.f));
+    boundingBox = boundingBox.Transform(objectToWorldMatrix);
 
     assert(acceleration);
     acceleration->Initialize(childObjects);
@@ -144,5 +141,21 @@ void SceneObject::Finalize()
 
 bool SceneObject::Trace(const SceneObject* parentObject, Ray* inputRay, IntersectionState* outputIntersection) const
 {
-    return acceleration->Trace(this, inputRay, outputIntersection);
+    if (inputRay->IsObjectMasked(GetUniqueId())) {
+        return false;
+    }
+    bool hit = acceleration->Trace(this, inputRay, outputIntersection);
+    if (!hit) {
+        inputRay->SetRayMask(GetUniqueId());
+    }
+    return hit;
+}
+
+std::string SceneObject::GetChildObjectNames() const
+{
+    std::ostringstream oss;
+    for (size_t i = 0; i < childObjects.size(); ++i) {
+        oss << childObjects[i]->GetName() << "\t";
+    }
+    return oss.str();
 }

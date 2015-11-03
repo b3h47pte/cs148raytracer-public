@@ -42,12 +42,15 @@ public:
     virtual void CreateDefaultAccelerationData();
     virtual void CreateAccelerationData(AccelerationTypes perObjectType);
 
-    virtual Box GetBoundingBox() override
+    virtual Box GetBoundingBox() const override
     {
         return boundingBox;
     }
 
     virtual bool Trace(const SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const override;
+
+    virtual std::string GetHumanIdentifier() const override { return GetChildObjectNames(); }
+    std::string GetChildObjectNames() const;
 protected:
     Box boundingBox;
     static const float MINIMUM_SCALE;
