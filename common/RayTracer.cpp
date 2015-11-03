@@ -41,6 +41,9 @@ void RayTracer::Run()
 
     for (int r = 0; r < static_cast<int>(currentResolution.y); ++r) {
         for (int c = 0; c < static_cast<int>(currentResolution.x); ++c) {
+
+            //if (r != currentResolution.y / 2 || c != currentResolution.x / 2) continue;
+
             imageWriter.SetPixelColor(currentSampler->ComputeSamplesAndColor(maxSamplesPerPixel, 2, [&](glm::vec3 inputSample) {
                 const glm::vec3 minRange(-0.5f, -0.5f, 0.f);
                 const glm::vec3 maxRange(0.5f, 0.5f, 0.f);

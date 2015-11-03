@@ -31,7 +31,7 @@ std::shared_ptr<Scene> Assignment5::CreateScene() const
     std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
     cubeSceneObject->AddMeshObject(cubeObjects);
     cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
-    cubeSceneObject->CreateAccelerationData(AccelerationTypes::NONE);
+    cubeSceneObject->CreateAccelerationData(AccelerationTypes::UNIFORM_GRID);
     newScene->AddSceneObject(cubeSceneObject);
 
     // Lights
