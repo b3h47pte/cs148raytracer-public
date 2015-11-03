@@ -31,8 +31,6 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
         std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
         cubeSceneObject->AddMeshObject(cubeObjects[i]);
         cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
-
-        // Assignment 6 Part 3 TODO: Change AccelerationTypes::BVH here to AccelerationTypes::NONE.
         cubeSceneObject->CreateAccelerationData(AccelerationTypes::BVH);
         newScene->AddSceneObject(cubeSceneObject);
     }
