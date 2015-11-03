@@ -75,7 +75,6 @@ bool VoxelGrid::Trace(const SceneObject* parentObject, Ray* inputRay, Intersecti
     std::cout << "Initial Voxel Position: " << glm::to_string(currentVoxelIndex) << " for " << glm::to_string(rayPos) << " going " << glm::to_string(rayDir) << std::endl;
 #endif
     // If we aren't currently within the grid, move the ray position such that we are.
-    float currentRayMaxT = 0.f;
     if (!IsInsideGrid(currentVoxelIndex)) {
         IntersectionState tempState;
         if (!boundingBox.Trace(parentObject, inputRay, &tempState)) {

@@ -47,7 +47,7 @@ glm::vec3 BackwardRenderer::ComputeSampleColor(const IntersectionState& intersec
             const float lightAttenuation = light->ComputeLightAttenuation(intersectionPoint);
 
             // Note that the material should compute the parts of the lighting equation too.
-            const glm::vec3 brdfResponse = objectMaterial->ComputeBRDF(intersection, *light, sampleRays[s], fromCameraRay, lightAttenuation);
+            const glm::vec3 brdfResponse = objectMaterial->ComputeBRDF(intersection, light->GetLightColor(), sampleRays[s], fromCameraRay, lightAttenuation);
             sampleColor += brdfResponse;
         }
     }
