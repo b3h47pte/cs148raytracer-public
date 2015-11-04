@@ -100,7 +100,7 @@ int Assignment6::GetMaxReflectionBounces() const
 
 int Assignment6::GetMaxRefractionBounces() const
 {
-    return 0;
+    return 4;
 }
 
 glm::vec2 Assignment6::GetImageOutputResolution() const
