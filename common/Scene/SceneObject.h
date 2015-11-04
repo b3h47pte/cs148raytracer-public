@@ -41,6 +41,10 @@ public:
 
     virtual void CreateDefaultAccelerationData();
     virtual void CreateAccelerationData(AccelerationTypes perObjectType);
+    virtual void CreateAccelerationData(AccelerationTypes perObjectType, AccelerationTypes perMeshObjectType);
+
+    virtual void ConfigureAccelerationStructure(std::function<void(class AccelerationStructure*)> configure);
+    virtual void ConfigureChildMeshAccelerationStructure(std::function<void(class AccelerationStructure*)> configure);
 
     virtual Box GetBoundingBox() const override
     {

@@ -119,11 +119,28 @@ void SceneObject::CreateDefaultAccelerationData()
 
 void SceneObject::CreateAccelerationData(AccelerationTypes perObjectType)
 {
+    CreateAccelerationData(perObjectType, perObjectType);
+}
+
+void SceneObject::CreateAccelerationData(AccelerationTypes perObjectType, AccelerationTypes perMeshObjectType)
+{
     for (size_t i = 0; i < childObjects.size(); ++i) {
-        childObjects[i]->CreateAccelerationData(perObjectType);
+        childObjects[i]->CreateAccelerationData(perMeshObjectType);
     }
     acceleration = AccelerationGenerator::CreateStructureFromType(perObjectType);
     assert(acceleration);
+}
+
+void SceneObject::ConfigureAccelerationStructure(std::function<void(class AccelerationStructure*)> configure)
+{
+    configure(acceleration.get());
+}
+
+void SceneObject::ConfigureChildMeshAccelerationStructure(std::function<void(class AccelerationStructure*)> configure)
+{
+    for (size_t i = 0; i < childObjects.size(); ++i) {
+        configure(childObjects[i]->acceleration.get());
+    }
 }
 
 void SceneObject::Finalize()

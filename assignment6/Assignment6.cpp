@@ -32,6 +32,20 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
         cubeSceneObject->AddMeshObject(cubeObjects[i]);
         cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
         cubeSceneObject->CreateAccelerationData(AccelerationTypes::BVH);
+
+        cubeSceneObject->ConfigureAccelerationStructure([](AccelerationStructure* genericAccelerator) {
+            BVHAcceleration* accelerator = dynamic_cast<BVHAcceleration*>(genericAccelerator);
+            accelerator->SetMaximumChildren(2);
+            accelerator->SetNodesOnLeaves(2);
+        });
+
+        cubeSceneObject->ConfigureChildMeshAccelerationStructure([](AccelerationStructure* genericAccelerator) {
+            BVHAcceleration* accelerator = dynamic_cast<BVHAcceleration*>(genericAccelerator);
+            accelerator->SetMaximumChildren(2);
+            accelerator->SetNodesOnLeaves(2);
+        });
+
+
         newScene->AddSceneObject(cubeSceneObject);
     }
 
@@ -86,7 +100,7 @@ int Assignment6::GetMaxReflectionBounces() const
 
 int Assignment6::GetMaxRefractionBounces() const
 {
-    return 4;
+    return 0;
 }
 
 glm::vec2 Assignment6::GetImageOutputResolution() const

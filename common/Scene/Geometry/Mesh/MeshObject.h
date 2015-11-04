@@ -25,6 +25,8 @@ public:
     virtual const class Material* GetMaterial() const;
 
     virtual bool Trace(const class SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const override;
+
+    friend class SceneObject;
 protected:
     std::vector<std::shared_ptr<class PrimitiveBase>> elements;
     Box boundingBox;
