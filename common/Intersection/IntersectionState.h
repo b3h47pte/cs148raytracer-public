@@ -43,4 +43,5 @@ struct IntersectionState
 
     // Utility Functions
     glm::vec3 ComputeNormal() const;
+    glm::vec2 ComputeUV() const;
 };

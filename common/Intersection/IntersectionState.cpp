@@ -20,3 +20,15 @@ glm::vec3 IntersectionState::ComputeNormal() const
     // Otherwise, use the face normal.
     return glm::normalize(normalTransform * intersectedPrimitive->GetPrimitiveNormal());
 }
+
+glm::vec2 IntersectionState::ComputeUV() const
+{
+    assert(hasIntersection && intersectedPrimitive && primitiveParent);
+    assert(primitiveIntersectionWeights.size() == static_cast<size_t>(intersectedPrimitive->GetTotalVertices()));
+
+    glm::vec2 retUV;
+    for (int i = 0; i < intersectedPrimitive->GetTotalVertices(); ++i) {
+        retUV += primitiveIntersectionWeights[i] * intersectedPrimitive->GetVertexUV(i);
+    }
+    return retUV;
+}

@@ -95,3 +95,8 @@ void Material::LoadMaterialFromAssimp(std::shared_ptr<struct aiMaterial> assimpM
 
     assimpMaterial->Get(AI_MATKEY_REFRACTI, &indexOfRefraction, nullptr);
 }
+
+void Material::SetTexture(const std::string& id, std::shared_ptr<class Texture> inputTexture)
+{
+    textureStorage[id] = std::move(inputTexture);
+}

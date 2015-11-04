@@ -69,6 +69,11 @@ public:
         return normals[index];
     }
 
+    virtual glm::vec2 GetVertexUV(int index) const override
+    {
+        return uvs[index];
+    }
+
 protected:
     std::array<glm::vec3, N> positions;
     std::array<glm::vec3, N> normals;
