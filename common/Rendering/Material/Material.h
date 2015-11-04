@@ -31,7 +31,7 @@ protected:
     virtual glm::vec3 ComputeReflection(const class Renderer* renderer, const struct IntersectionState& intersection) const;
     virtual glm::vec3 ComputeTransmission(const class Renderer* renderer, const struct IntersectionState& intersection) const;
 
-    std::map<std::string, std::shared_ptr<class Texture>> textureStorage;
+    std::unordered_map<std::string, std::shared_ptr<class Texture>> textureStorage;
 private:
     float reflectivity;         // Perfect reflection 
     float transmittance;        // Refraction
