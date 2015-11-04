@@ -9,7 +9,7 @@ public:
     virtual ~Material();
 
     virtual glm::vec3 ComputeNonLightDependentBRDF(const class Renderer* renderer, const struct IntersectionState& intersection) const;
-    virtual glm::vec3 ComputeBRDF(const struct IntersectionState& intersection, const class Light& relevantLight, const class Ray& toLightRay, const class Ray& fromCameraRay, float lightAttenuation) const;
+    virtual glm::vec3 ComputeBRDF(const struct IntersectionState& intersection, const glm::vec3& lightColor, const class Ray& toLightRay, const class Ray& fromCameraRay, float lightAttenuation) const;
     
     virtual std::shared_ptr<Material> Clone() const = 0;
     virtual void LoadMaterialFromAssimp(std::shared_ptr<struct aiMaterial> assimpMaterial);

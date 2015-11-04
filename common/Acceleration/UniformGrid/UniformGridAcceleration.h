@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/Acceleration/AccelerationStructure.h"
+#include "common/Acceleration/UniformGrid/Internal/VoxelGrid.h"
 
 class UniformGridAcceleration : public AccelerationStructure
 {

@@ -10,9 +10,9 @@ public:
     void SetDiffuse(glm::vec3 input);
     void SetSpecular(glm::vec3 inputColor, float inputShininess);
 
-    virtual std::shared_ptr<Material> Clone() const;
+    virtual std::shared_ptr<Material> Clone() const override;
 
-    virtual void LoadMaterialFromAssimp(std::shared_ptr<struct aiMaterial> assimpMaterial);
+    virtual void LoadMaterialFromAssimp(std::shared_ptr<struct aiMaterial> assimpMaterial) override;
 
 protected:
     virtual glm::vec3 ComputeDiffuse(const struct IntersectionState& intersection, const glm::vec3& lightColor, const float NdL, const float NdH, const float NdV, const float VdH) const override;
