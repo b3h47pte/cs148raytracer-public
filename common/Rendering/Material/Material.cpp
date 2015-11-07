@@ -44,7 +44,6 @@ glm::vec3 Material::ComputeBRDF(const struct IntersectionState& intersection, co
     const glm::vec3 specularColor = ComputeSpecular(intersection, lightColor, NdL, NdH, NdV, VdH);
 
     const float attenuation = std::max((1.f - reflectivity - transmittance) * lightAttenuation, 0.f);
-    return diffuseColor;
     return attenuation * (diffuseColor + specularColor);
 }
 

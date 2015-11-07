@@ -50,11 +50,9 @@ void BlinnPhongMaterial::LoadMaterialFromAssimp(std::shared_ptr<aiMaterial> assi
 
     Material::LoadMaterialFromAssimp(assimpMaterial);
 
-    unsigned int bytesRead;
-    assimpMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, glm::value_ptr(diffuseColor), &bytesRead);
-    assimpMaterial->Get(AI_MATKEY_COLOR_SPECULAR, glm::value_ptr(specularColor), &bytesRead);
-    assimpMaterial->Get(AI_MATKEY_SHININESS, &shininess, &bytesRead);
-
+    assimpMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, glm::value_ptr(diffuseColor), nullptr);
+    assimpMaterial->Get(AI_MATKEY_COLOR_SPECULAR, glm::value_ptr(specularColor), nullptr);
+    assimpMaterial->Get(AI_MATKEY_SHININESS, &shininess, nullptr);
     if (assimpMaterial->GetTextureCount(aiTextureType_DIFFUSE)) {
         aiString aiDiffusePath;
         assimpMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &aiDiffusePath);

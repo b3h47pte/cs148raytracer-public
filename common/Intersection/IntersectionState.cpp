@@ -14,9 +14,9 @@ glm::vec3 IntersectionState::ComputeNormal() const
         glm::vec3 retTangent;
         glm::vec3 retBitangent;
         for (int i = 0; i < intersectedPrimitive->GetTotalVertices(); ++i) {
-            retNormal += primitiveIntersectionWeights[i] * intersectedPrimitive->GetVertexNormal(i);
-            retTangent += primitiveIntersectionWeights[i] * intersectedPrimitive->GetVertexTangent(i);
-            retBitangent += primitiveIntersectionWeights[i] * intersectedPrimitive->GetVertexBitangent(i);
+            retNormal += primitiveIntersectionWeights[i] * normalTransform * intersectedPrimitive->GetVertexNormal(i);
+            retTangent += primitiveIntersectionWeights[i] * normalTransform* intersectedPrimitive->GetVertexTangent(i);
+            retBitangent += primitiveIntersectionWeights[i] * normalTransform * intersectedPrimitive->GetVertexBitangent(i);
         }
 
         if (intersectedPrimitive->HasNormalMap()) {
