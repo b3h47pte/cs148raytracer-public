@@ -56,6 +56,7 @@ std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, s
     const std::string completeFilename = std::string(STRINGIFY(ASSET_PATH)) + "/" + filename;
 
     const aiScene* scene = importer.ReadFile(completeFilename.c_str(),
+            aiProcess_GenNormals |
             aiProcess_CalcTangentSpace       | 
             aiProcess_Triangulate            |
             aiProcess_JoinIdenticalVertices  |
