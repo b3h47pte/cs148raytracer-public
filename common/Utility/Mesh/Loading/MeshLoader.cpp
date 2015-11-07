@@ -14,16 +14,17 @@
 namespace MeshLoader
 {
 
-void LoadFaceIntoPrimitive(const aiFace& face, PrimitiveBase& primitive, std::vector<glm::vec3>& allPosition, std::vector<glm::vec3>& allNormals, std::vector<glm::vec2>& allUV)
+void LoadFaceIntoPrimitive(const aiFace& face, PrimitiveBase& primitive, std::vector<glm::vec3>& allPosition, std::vector<glm::vec3>& allNormals, std::vector<glm::vec2>& allUV, std::vector<glm::vec3>& allTangents, std::vector<glm::vec3>& allBitangents)
 {
-    LoadFaceIntoPrimitive(face.mNumIndices, face.mIndices, primitive, allPosition, allNormals, allUV);
+    LoadFaceIntoPrimitive(face.mNumIndices, face.mIndices, primitive, allPosition, allNormals, allUV, allTangents, allBitangents);
 }
 
-void LoadFaceIntoPrimitive(unsigned int numVertices, unsigned int* indices, PrimitiveBase& primitive, std::vector<glm::vec3>& allPosition, std::vector<glm::vec3>& allNormals, std::vector<glm::vec2>& allUV)
+    void LoadFaceIntoPrimitive(unsigned int numVertices, unsigned int* indices, PrimitiveBase& primitive, std::vector<glm::vec3>& allPosition, std::vector<glm::vec3>& allNormals, std::vector<glm::vec2>& allUV, std::vector<glm::vec3>& allTangents, std::vector<glm::vec3>& allBitangents)
 {
     assert(numVertices == primitive.GetTotalVertices());
     bool hasNormals = allNormals.size() == allPosition.size();
     bool hasUV = allUV.size() == allPosition.size();
+    bool hasTangentsAndBitangents = (allTangents.size() == allPosition.size()) && (allBitangents.size() == allPosition.size());
 
     for (unsigned int i = 0; i < numVertices; ++i) {
         primitive.SetVertexPosition(i, allPosition[indices[i]]);
@@ -34,6 +35,10 @@ void LoadFaceIntoPrimitive(unsigned int numVertices, unsigned int* indices, Prim
 
         if (hasUV) {
             primitive.SetVertexUV(i, allUV[indices[i]]);
+        }
+
+        if (hasTangentsAndBitangents) {
+            primitive.SetVertexTangentBitangent(i, allTangents[indices[i]], allBitangents[indices[i]]);
         }
     }
 }
@@ -93,6 +98,13 @@ std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, s
             allUV.resize(totalVertices);
         }
 
+        std::vector<glm::vec3> allTangents;
+        std::vector<glm::vec3> allBitangents;
+        if (mesh->HasTangentsAndBitangents()) {
+            allTangents.resize(totalVertices);
+            allBitangents.resize(totalVertices);
+        }
+
         for (decltype(totalVertices) v = 0; v < totalVertices; ++v) {
             allPosition[v] = glm::vec3(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z);
             
@@ -103,6 +115,11 @@ std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, s
             if (mesh->HasTextureCoords(0)) {
                 allUV[v] = glm::vec2(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y);
             }
+
+            if (mesh->HasTangentsAndBitangents()) {
+                allTangents[v] = glm::vec3(mesh->mTangents[v].x, mesh->mTangents[v].y, mesh->mTangents[v].z);
+                allBitangents[v] = glm::vec3(mesh->mBitangents[v].x, mesh->mBitangents[v].y, mesh->mBitangents[v].z);
+            }
         }
 
         if (mesh->HasFaces()) {
@@ -111,7 +128,7 @@ std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, s
                 std::shared_ptr<PrimitiveBase> newPrimitive = nullptr;
                 if (face.mNumIndices == 3) {
                     newPrimitive = std::make_shared<Triangle>(newMesh.get());
-                    LoadFaceIntoPrimitive(face, *newPrimitive.get(), allPosition, allNormals, allUV);
+                    LoadFaceIntoPrimitive(face, *newPrimitive.get(), allPosition, allNormals, allUV, allTangents, allBitangents);
                 } else {
                     std::cerr << "WARNING: Input mesh has an unsupported primitive type. Skipping face with: " << face.mNumIndices << " vertices." << std::endl;
                     continue;
@@ -125,7 +142,7 @@ std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, s
             for (decltype(totalVertices) v = 0; v < totalVertices; v += 3) {
                 std::shared_ptr<PrimitiveBase> newPrimitive = std::make_shared<Triangle>(newMesh.get());
                 unsigned int indices[3] = { v, v + 1, v + 2 };
-                LoadFaceIntoPrimitive(3, indices, *newPrimitive.get(), allPosition, allNormals, allUV);
+                LoadFaceIntoPrimitive(3, indices, *newPrimitive.get(), allPosition, allNormals, allUV, allTangents, allBitangents);
                 assert(newPrimitive);
                 newMesh->AddPrimitive(newPrimitive);
             }

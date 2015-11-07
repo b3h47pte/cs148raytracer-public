@@ -10,6 +10,7 @@ public:
     virtual void SetVertexPosition(int index, glm::vec3 position) = 0;
     virtual void SetVertexNormal(int index, glm::vec3 normal) = 0;
     virtual void SetVertexUV(int index, glm::vec2 uv) = 0;
+    virtual void SetVertexTangentBitangent(int index, glm::vec3 tangent, glm::vec3 bitangent) = 0;
     virtual int GetTotalVertices() const = 0;
     virtual void Finalize() = 0;
 
@@ -17,4 +18,6 @@ public:
     virtual glm::vec3 GetVertexNormal(int index) const = 0;
     virtual glm::vec3 GetPrimitiveNormal() const = 0;
     virtual glm::vec2 GetVertexUV(int index) const = 0;
+    virtual glm::vec3 GetVertexTangent(int index) const = 0;
+    virtual glm::vec3 GetVertexBitangent(int index) const = 0;
 };

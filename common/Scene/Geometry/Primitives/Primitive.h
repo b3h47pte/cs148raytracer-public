@@ -9,7 +9,7 @@ class Primitive : public PrimitiveBase, public SceneObject
 {
 public:
     Primitive(class MeshObject* inputParent):
-        hasNormals(false), hasUVs(false), parentMesh(inputParent)
+        hasNormals(false), hasUVs(false), hasTangentBitangents(false), parentMesh(inputParent)
     {
     }
 
@@ -38,6 +38,15 @@ public:
         uvs[index] = uv;
         hasUVs = true;
     }
+
+    virtual void SetVertexTangentBitangent(int index, glm::vec3 tangent, glm::vec3 bitangent) override
+    {
+        assert(index >= 0 && index < N);
+        tangents[index] = tangent;
+        bitangents[index] = bitangent;
+        hasTangentBitangents = true;
+    }
+
 
     virtual int GetTotalVertices() const override
     {
@@ -74,6 +83,16 @@ public:
         return uvs[index];
     }
 
+    virtual glm::vec3 GetVertexTangent(int index) const override
+    {
+        return tangents[index];
+    }
+
+    virtual glm::vec3 GetVertexBitangent(int index) const override
+    {
+        return bitangents[index];
+    }
+
 protected:
     std::array<glm::vec3, N> positions;
     std::array<glm::vec3, N> normals;
@@ -81,6 +100,10 @@ protected:
 
     std::array<glm::vec2, N> uvs;
     bool hasUVs;
+    
+    std::array<glm::vec3, N> tangents;
+    std::array<glm::vec3, N> bitangents;
+    bool hasTangentBitangents;
 
     void UpdateBoundingBox()
     {

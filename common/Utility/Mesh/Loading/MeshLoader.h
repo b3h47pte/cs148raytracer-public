@@ -15,8 +15,8 @@ namespace MeshLoader
 
 std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, std::vector<std::shared_ptr<aiMaterial>>* outputMaterials = nullptr);
 
-void LoadFaceIntoPrimitive(const aiFace& face, PrimitiveBase& primitive, std::vector<glm::vec3>& allPosition, std::vector<glm::vec3>& allNormals, std::vector<glm::vec2>& allUV);
-void LoadFaceIntoPrimitive(unsigned int numVertices, unsigned int* indices, PrimitiveBase& primitive, std::vector<glm::vec3>& allPosition, std::vector<glm::vec3>& allNormals, std::vector<glm::vec2>& allUV);
+void LoadFaceIntoPrimitive(const aiFace& face, PrimitiveBase& primitive, std::vector<glm::vec3>& allPosition, std::vector<glm::vec3>& allNormals, std::vector<glm::vec2>& allUV, std::vector<glm::vec3>& allTangents, std::vector<glm::vec3>& allBitangents);
+void LoadFaceIntoPrimitive(unsigned int numVertices, unsigned int* indices, PrimitiveBase& primitive, std::vector<glm::vec3>& allPosition, std::vector<glm::vec3>& allNormals, std::vector<glm::vec2>& allUV, std::vector<glm::vec3>& allTangents, std::vector<glm::vec3>& allBitangents);
 }
 
 #endif
