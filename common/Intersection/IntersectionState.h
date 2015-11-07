@@ -23,6 +23,7 @@ struct IntersectionState
         remainingReflectionBounces = state->remainingReflectionBounces;
         remainingRefractionBounces = state->remainingRefractionBounces;
         intersectionT = state->intersectionT;
+        currentIOR = state->currentIOR;
     }
 
     std::shared_ptr<struct IntersectionState> reflectionIntersection;

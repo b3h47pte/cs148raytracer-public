@@ -56,6 +56,7 @@ bool Scene::Trace(class Ray* inputRay, IntersectionState* outputIntersection) co
             // If we're going into the mesh, set the target IOR to be the IOR of the mesh.
             float targetIOR = (NdR < SMALL_EPSILON) ? currentMaterial->GetIOR() : 1.f;
             const glm::vec3 refractionDir = inputRay->RefractRay(outputIntersection->ComputeNormal(), outputIntersection->currentIOR, targetIOR);
+            
             outputIntersection->refractionIntersection->currentIOR = targetIOR;
 
             Ray refractionRay(intersectionPoint + refractionDir * LARGE_EPSILON, refractionDir);
