@@ -11,10 +11,19 @@ glm::vec3 IntersectionState::ComputeNormal() const
     if (intersectedPrimitive->HasVertexNormals()) {
         // If the mesh has normals, linearly interpolate the normals to get the normal to use.
         glm::vec3 retNormal;
+        glm::vec3 retTangent;
+        glm::vec3 retBitangent;
         for (int i = 0; i < intersectedPrimitive->GetTotalVertices(); ++i) {
             retNormal += primitiveIntersectionWeights[i] * intersectedPrimitive->GetVertexNormal(i);
+            retTangent += primitiveIntersectionWeights[i] * intersectedPrimitive->GetVertexTangent(i);
+            retBitangent += primitiveIntersectionWeights[i] * intersectedPrimitive->GetVertexBitangent(i);
         }
-        return glm::normalize(normalTransform * retNormal);
+
+        if (intersectedPrimitive->HasNormalMap()) {
+            return glm::normalize(intersectedPrimitive->GetVertexNormalMap(ComputeUV(), retTangent, retBitangent, retNormal));
+        }
+
+        return glm::normalize(retNormal);
     }
 
     // Otherwise, use the face normal.

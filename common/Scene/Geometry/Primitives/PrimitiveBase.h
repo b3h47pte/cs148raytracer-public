@@ -15,7 +15,9 @@ public:
     virtual void Finalize() = 0;
 
     virtual bool HasVertexNormals() const = 0;
+    virtual bool HasNormalMap() const = 0;
     virtual glm::vec3 GetVertexNormal(int index) const = 0;
+    virtual glm::vec3 GetVertexNormalMap(glm::vec2 uv, const glm::vec3& worldTangent, const glm::vec3& worldBitangent, const glm::vec3& worldNormal) const = 0;
     virtual glm::vec3 GetPrimitiveNormal() const = 0;
     virtual glm::vec2 GetVertexUV(int index) const = 0;
     virtual glm::vec3 GetVertexTangent(int index) const = 0;

@@ -15,7 +15,7 @@ glm::vec4 Texture2D::Sample(const glm::vec2& coord) const
     const glm::vec2 imageSpaceCoordinates = coord * glm::vec2(texWidth, texHeight);
 
     glm::vec2 floorVec(std::floor(imageSpaceCoordinates.x), std::floor(imageSpaceCoordinates.y));
-    glm::vec2 ceilVec(std::ceil(imageSpaceCoordinates.x), std::ceil(imageSpaceCoordinates.y));
+    glm::vec2 ceilVec(floorVec.x + 1.f, floorVec.y + 1.f);
 
     // Bilinear Interpolation
     const glm::ivec2 q11(floorVec);

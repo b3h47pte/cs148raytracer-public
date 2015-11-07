@@ -2,6 +2,8 @@
 
 #include "common/Scene/Geometry/Primitives/PrimitiveBase.h"
 #include "common/Scene/Geometry/Mesh/MeshObject.h"
+#include "common/Rendering/Material/Material.h"
+#include "common/Rendering/Textures/Texture.h"
 #include "common/Scene/SceneObject.h"
 
 template<int N>
@@ -76,6 +78,27 @@ public:
     virtual glm::vec3 GetVertexNormal(int index) const override
     {
         return normals[index];
+    }
+
+    virtual bool HasNormalMap() const override
+    {
+        const Material* material = parentMesh->GetMaterial();
+        if (material && hasUVs) {
+            Texture* normalTexture = material->GetTexture("normalTexture");
+            if (normalTexture) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    virtual glm::vec3 GetVertexNormalMap(glm::vec2 uv, const glm::vec3& worldTangent, const glm::vec3& worldBitangent, const glm::vec3& worldNormal) const override
+    {
+        assert(HasNormalMap());
+        const Material* material = parentMesh->GetMaterial();
+        Texture* normalTexture = material->GetTexture("normalTexture");
+        glm::vec3 normalMap = glm::normalize(glm::vec3(normalTexture->Sample(uv)) * 2.f - 1.f);
+        return glm::mat3(worldTangent, worldBitangent, worldNormal) * normalMap;
     }
 
     virtual glm::vec2 GetVertexUV(int index) const override

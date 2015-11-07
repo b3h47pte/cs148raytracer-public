@@ -12,5 +12,7 @@
 #include "common/Scene/Lights/Directional/DirectionalLight.h"
 #include "common/Rendering/Material/BlinnPhong/BlinnPhongMaterial.h"
 #include "common/Utility/Mesh/Loading/MeshLoader.h"
+#include "common/Utility/Texture/TextureLoader.h"
+#include "common/Rendering/Textures/Texture2D.h"
 #include "common/Rendering/Renderer.h"
 #include "common/Rendering/Renderer/Backward/BackwardRenderer.h"

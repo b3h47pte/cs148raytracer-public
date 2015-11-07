@@ -24,6 +24,7 @@ public:
     float GetIOR() const { return indexOfRefraction; }
 
     void SetTexture(const std::string& id, std::shared_ptr<class Texture> inputTexture);
+    class Texture* GetTexture(const std::string& id) const;
 
 protected:
     virtual glm::vec3 ComputeDiffuse(const struct IntersectionState& intersection, const glm::vec3& lightColor, const float NdL, const float NdH, const float NdV, const float VdH) const;
