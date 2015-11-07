@@ -22,7 +22,7 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
 
     // Objects
     std::vector<std::shared_ptr<aiMaterial>> loadedMaterials;
-    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Assignment6.obj", &loadedMaterials);
+    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Assignment6-Alt.obj", &loadedMaterials);
     for (size_t i = 0; i < cubeObjects.size(); ++i) {
         std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
         materialCopy->LoadMaterialFromAssimp(loadedMaterials[i]);
