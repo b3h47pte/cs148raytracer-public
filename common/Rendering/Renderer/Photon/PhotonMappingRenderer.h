@@ -24,4 +24,5 @@ private:
     int causticPhotonNumber;
 
     void GenericPhotonMapGeneration(PhotonKdtree& photonMap, int totalPhotons, std::function<bool(const class MeshObject&)> objectFilter);
+    void TracePhoton(const class Ray& photonRay, glm::vec3 lightIntensity, std::vector<char>& path);
 };

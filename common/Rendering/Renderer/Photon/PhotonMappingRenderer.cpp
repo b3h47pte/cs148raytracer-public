@@ -28,13 +28,7 @@ void PhotonMappingRenderer::InitializeRenderer()
         return mat->HasDiffuseReflection();
     });
 
-    GenericPhotonMapGeneration(causticMap, causticPhotonNumber, [](const class MeshObject& mesh) {
-        const Material* mat = mesh.GetMaterial();
-        if (!mat) {
-            return false;
-        }
-        return mat->HasSpecularReflection();
-    });
+    // Todo if you have time: generate the photon caustic map
 }
 
 void PhotonMappingRenderer::GenericPhotonMapGeneration(PhotonKdtree& photonMap, int totalPhotons, std::function<bool(const class MeshObject&)> objectFilter)
@@ -56,6 +50,41 @@ void PhotonMappingRenderer::GenericPhotonMapGeneration(PhotonKdtree& photonMap, 
             relevantMeshObjects.push_back(meshObject);
         }
     }
+
+    // Todo if you have time: Implement projection mapping to make your photon mapper more efficient.
+
+    float totalLightIntensity = 0.f;
+    size_t totalLights = storedScene->GetTotalLights();
+    for (size_t i = 0; i < totalLights; ++i) {
+        const Light* currentLight = storedScene->GetLightObject(i);
+        if (!currentLight) {
+            continue;
+        }
+        totalLightIntensity = glm::length(currentLight->GetLightColor());
+    }
+
+    // Shoot photons -- number of photons for light is proportional to the light's intensity relative to the total light intensity of the scene.
+    for (size_t i = 0; i < totalLights; ++i) {
+        const Light* currentLight = storedScene->GetLightObject(i);
+        if (!currentLight) {
+            continue;
+        }
+
+        const float proportion = glm::length(currentLight->GetLightColor()) / totalLightIntensity;
+        const int totalPhotonsForLight = static_cast<const int>(proportion * totalPhotons);
+        const glm::vec3 photonIntensity = currentLight->GetLightColor() / static_cast<float>(totalPhotonsForLight);
+        for (int j = 0; j < totalPhotonsForLight; ++j) {
+            Ray photonRay;
+            std::vector<char> path;
+            path.push_back('L');
+            currentLight->GenerateRandomPhotonRay(photonRay);
+            TracePhoton(photonRay, photonIntensity, path);
+        }
+    }
+}
+
+void PhotonMappingRenderer::TracePhoton(const class Ray& photonRay, glm::vec3 lightIntensity, std::vector<char>& path)
+{
 }
 
 glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionState& intersection, const class Ray& fromCameraRay) const

@@ -10,3 +10,7 @@ float DirectionalLight::ComputeLightAttenuation(glm::vec3 origin) const
 {
     return 1.f;
 }
+
+void DirectionalLight::GenerateRandomPhotonRay(Ray& ray) const
+{
+}

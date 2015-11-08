@@ -24,12 +24,13 @@ void RayTracer::Run()
     assert(currentScene && currentCamera && currentSampler && currentRenderer);
 
     currentSampler->InitializeSampler(storedApplication.get(), currentScene.get());
-    currentRenderer->InitializeRenderer();
 
     // Scene preprocessing -- generate acceleration structures, etc.
     // After this call, we are guaranteed that the "acceleration" member of the scene and all scene objects within the scene will be non-NULL.
     currentScene->GenerateDefaultAccelerationData();
     currentScene->Finalize();
+
+    currentRenderer->InitializeRenderer();
 
     // Prepare for Output
     const glm::vec2 currentResolution = storedApplication->GetImageOutputResolution();
