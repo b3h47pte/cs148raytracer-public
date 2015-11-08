@@ -42,6 +42,9 @@ file(GLOB_RECURSE COMMON_HEADERS "common/*.h")
 # GLM Headers
 include_directories("./external/glm")
 
+# Nanoflann
+include_directories("./external/nanoflann/include")
+
 # Open Asset Import Headers
 include_directories("./external/assimp/include")
 
@@ -103,7 +106,8 @@ source_group(common\\Rendering\\Textures REGULAR_EXPRESSION common/Rendering/Tex
 source_group(common\\Rendering\\Material REGULAR_EXPRESSION common/Rendering/Material/.*)
 source_group(common\\Rendering\\Material\\BlinnPhong REGULAR_EXPRESSION common/Rendering/Material/BlinnPhong/.*)
 source_group(common\\Rendering\\Renderer REGULAR_EXPRESSION common/Rendering/Renderer/.*)
-source_group(common\\Rendering\\Renderer\\Forward REGULAR_EXPRESSION common/Rendering/Renderer/Forward/.*)
+source_group(common\\Rendering\\Renderer\\Backward REGULAR_EXPRESSION common/Rendering/Renderer/Backward/.*)
+source_group(common\\Rendering\\Renderer\\Photon REGULAR_EXPRESSION common/Rendering/Renderer/Photon/.*)
 source_group(common\\Sampling REGULAR_EXPRESSION common/Sampling/.*)
 source_group(common\\Sampling\\Adaptive REGULAR_EXPRESSION common/Sampling/Adaptive/.*)
 source_group(common\\Sampling\\Adaptive\\Simple REGULAR_EXPRESSION common/Sampling/Adaptive/Simple/.*)
