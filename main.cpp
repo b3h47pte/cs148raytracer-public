@@ -1,6 +1,6 @@
 #include "common/RayTracer.h"
 
-#define ASSIGNMENT 6
+#define ASSIGNMENT 7
 #if ASSIGNMENT == 5
 #define APPLICATION Assignment5
 #include "assignment5/Assignment5.h"

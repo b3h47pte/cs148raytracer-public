@@ -7,6 +7,8 @@
 #include "common/Rendering/Material/Material.h"
 #include "common/Intersection/IntersectionState.h"
 
+#define VISUALIZE_PHOTON_MAPPING 1
+
 PhotonMappingRenderer::PhotonMappingRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class ColorSampler> sampler):
     Renderer(scene, sampler)
 {
@@ -14,8 +16,14 @@ PhotonMappingRenderer::PhotonMappingRenderer(std::shared_ptr<class Scene> scene,
 
 void PhotonMappingRenderer::InitializeRenderer()
 {
+    // Generate Photon Maps
 }
 
 glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionState& intersection, const class Ray& fromCameraRay) const
 {
+#if VISUALIZE_PHOTON_MAPPING
+    return glm::vec3();
+#else
+    return glm::vec3();
+#endif
 }

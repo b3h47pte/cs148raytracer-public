@@ -42,8 +42,8 @@ file(GLOB_RECURSE COMMON_HEADERS "common/*.h")
 # GLM Headers
 include_directories("./external/glm")
 
-# Nanoflann
-include_directories("./external/nanoflann/include")
+# Kd-Tree Library
+include_directories("./external/libkdtree")
 
 # Open Asset Import Headers
 include_directories("./external/assimp/include")
