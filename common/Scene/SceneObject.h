@@ -37,6 +37,8 @@ public:
 
     virtual void AddMeshObject(std::shared_ptr<class MeshObject> object);
     virtual void AddMeshObject(const std::vector<std::shared_ptr<MeshObject>>& objects);
+    virtual int GetTotalMeshObjects() const { return static_cast<int>(childObjects.size()); }
+    virtual const class MeshObject* GetMeshObject(int index) const;
     virtual void Finalize();
 
     virtual void CreateDefaultAccelerationData();

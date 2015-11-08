@@ -190,3 +190,8 @@ void SceneObject::SetName(const std::string& input)
     nameSet = true;
     objectName = input;
 }
+
+const MeshObject* SceneObject::GetMeshObject(int index) const
+{
+    return childObjects[index].get();
+}

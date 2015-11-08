@@ -14,6 +14,9 @@ public:
     virtual std::shared_ptr<Material> Clone() const = 0;
     virtual void LoadMaterialFromAssimp(std::shared_ptr<struct aiMaterial> assimpMaterial);
 
+    virtual bool HasDiffuseReflection() const = 0;
+    virtual bool HasSpecularReflection() const { return IsReflective(); }
+
     void SetReflectivity(float input);
     bool IsReflective() const { return reflectivity > SMALL_EPSILON; }
 
