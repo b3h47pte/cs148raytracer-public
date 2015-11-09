@@ -13,46 +13,22 @@
 #define VISUALIZE_PHOTON_MAPPING 1
 
 PhotonMappingRenderer::PhotonMappingRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class ColorSampler> sampler):
-    Renderer(scene, sampler), diffusePhotonNumber(1000), causticPhotonNumber(1000)
+    BackwardRenderer(scene, sampler), 
+    diffusePhotonNumber(200000),
+    maxPhotonBounces(1000)
 {
+    srand(static_cast<unsigned int>(time(NULL)));
 }
 
 void PhotonMappingRenderer::InitializeRenderer()
 {
     // Generate Photon Maps
-    GenericPhotonMapGeneration(diffuseMap, diffusePhotonNumber, [](const class MeshObject& mesh) {
-        const Material* mat = mesh.GetMaterial();
-        if (!mat) {
-            return false;
-        }
-        return mat->HasDiffuseReflection();
-    });
-
-    // Todo if you have time: generate the photon caustic map
+    GenericPhotonMapGeneration(diffuseMap, diffusePhotonNumber);
+    diffuseMap.optimise();
 }
 
-void PhotonMappingRenderer::GenericPhotonMapGeneration(PhotonKdtree& photonMap, int totalPhotons, std::function<bool(const class MeshObject&)> objectFilter)
+void PhotonMappingRenderer::GenericPhotonMapGeneration(PhotonKdtree& photonMap, int totalPhotons)
 {
-    std::vector<const MeshObject*> relevantMeshObjects;
-    Box relevantMeshBoundingBox;
-
-    size_t totalObjects = storedScene->GetTotalObjects();
-    for (size_t i = 0; i < totalObjects; ++i) {
-        const SceneObject& object = storedScene->GetSceneObject(i);
-        for (int j = 0; j < object.GetTotalMeshObjects(); ++j) {
-            const MeshObject* meshObject = object.GetMeshObject(j);
-            if (!meshObject || !objectFilter(*meshObject)) {
-                continue;
-            }
-            
-            Box meshWorldSpaceBoundingBox = meshObject->GetBoundingBox().Transform(object.GetObjectToWorldMatrix());
-            relevantMeshBoundingBox.IncludeBox(meshWorldSpaceBoundingBox);
-            relevantMeshObjects.push_back(meshObject);
-        }
-    }
-
-    // Todo if you have time: Implement projection mapping to make your photon mapper more efficient.
-
     float totalLightIntensity = 0.f;
     size_t totalLights = storedScene->GetTotalLights();
     for (size_t i = 0; i < totalLights; ++i) {
@@ -78,30 +54,40 @@ void PhotonMappingRenderer::GenericPhotonMapGeneration(PhotonKdtree& photonMap, 
             std::vector<char> path;
             path.push_back('L');
             currentLight->GenerateRandomPhotonRay(photonRay);
-            TracePhoton(photonRay, photonIntensity, path);
+            TracePhoton(photonMap, &photonRay, photonIntensity, path, 1.f, maxPhotonBounces);
         }
     }
 }
 
-void PhotonMappingRenderer::TracePhoton(const class Ray& photonRay, glm::vec3 lightIntensity, std::vector<char>& path)
+void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay, glm::vec3 lightIntensity, std::vector<char>& path, float currentIOR, int remainingBounces)
 {
+    /*
+     * Assignment 7 TODO: Trace a photon into the scene and make it bounce.
+     *    
+     *    How to insert a 'Photon' struct into the photon map.
+     *        Photon myPhoton;
+     *        ... set photon properties ...
+     *        photonMap.insert(myPhoton);
+     */
 }
 
 glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionState& intersection, const class Ray& fromCameraRay) const
 {
+    glm::vec3 finalRenderColor = BackwardRenderer::ComputeSampleColor(intersection, fromCameraRay);
 #if VISUALIZE_PHOTON_MAPPING
-    return glm::vec3();
-#else
-    return glm::vec3();
+    Photon intersectionVirtualPhoton;
+    intersectionVirtualPhoton.position = intersection.intersectionRay.GetRayPosition(intersection.intersectionT);
+
+    std::vector<Photon> foundPhotons;
+    diffuseMap.find_within_range(intersectionVirtualPhoton, 0.003f, std::back_inserter(foundPhotons));
+    if (!foundPhotons.empty()) {
+        finalRenderColor += glm::vec3(1.f, 0.f, 0.f);
+    }
 #endif
+    return finalRenderColor;
 }
 
 void PhotonMappingRenderer::SetNumberOfDiffusePhotons(int diffuse)
 {
     diffusePhotonNumber = diffuse;
-}
-
-void PhotonMappingRenderer::SetNumberOfCasuticPhotons(int caustic)
-{
-    causticPhotonNumber = caustic;
 }

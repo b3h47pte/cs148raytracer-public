@@ -28,7 +28,7 @@ glm::vec3 Material::ComputeNonLightDependentBRDF(const class Renderer* renderer,
     return reflectivity * reflectionColor + transmittance * transmissionColor;
 }
 
-glm::vec3 Material::ComputeBRDF(const struct IntersectionState& intersection, const glm::vec3& lightColor, const class Ray& toLightRay, const class Ray& fromCameraRay, float lightAttenuation) const
+glm::vec3 Material::ComputeBRDF(const struct IntersectionState& intersection, const glm::vec3& lightColor, const class Ray& toLightRay, const class Ray& fromCameraRay, float lightAttenuation, bool computeDiffuse, bool computeSpecular) const
 {
     const glm::vec3 N = intersection.ComputeNormal();
     const glm::vec3 L = toLightRay.GetRayDirection();
@@ -40,8 +40,8 @@ glm::vec3 Material::ComputeBRDF(const struct IntersectionState& intersection, co
     const float NdV = std::min(std::max(glm::dot(N, V), 0.f), 1.f);
     const float VdH = std::min(std::max(glm::dot(V, H), 0.f), 1.f);
 
-    const glm::vec3 diffuseColor = ComputeDiffuse(intersection, lightColor, NdL, NdH, NdV, VdH);
-    const glm::vec3 specularColor = ComputeSpecular(intersection, lightColor, NdL, NdH, NdV, VdH);
+    const glm::vec3 diffuseColor = computeDiffuse ? ComputeDiffuse(intersection, lightColor, NdL, NdH, NdV, VdH) : glm::vec3();
+    const glm::vec3 specularColor = computeSpecular ? ComputeSpecular(intersection, lightColor, NdL, NdH, NdV, VdH) : glm::vec3();
 
     const float attenuation = std::max((1.f - reflectivity - transmittance) * lightAttenuation, 0.f);
     return attenuation * (diffuseColor + specularColor);

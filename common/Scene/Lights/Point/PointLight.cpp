@@ -17,4 +17,5 @@ float PointLight::ComputeLightAttenuation(glm::vec3 origin) const
 
 void PointLight::GenerateRandomPhotonRay(Ray& ray) const
 {
+    // Assignment 7 TODO: Fill in the random point light samples here.
 }

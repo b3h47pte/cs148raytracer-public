@@ -8,6 +8,9 @@ public:
     Ray();
     Ray(glm::vec3 inputPosition, glm::vec3 inputDirection, float inputMaxT = std::numeric_limits<float>::max());
 
+    void SetRayPosition(const glm::vec3& input) { position = glm::vec4(input, 1.f); }
+    void SetRayDirection(const glm::vec3& input) { rayDirection = input; } 
+
     virtual glm::vec4 GetForwardDirection() const override;
     glm::vec3 GetRayDirection() const;
 

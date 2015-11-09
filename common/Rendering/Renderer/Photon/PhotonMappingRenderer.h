@@ -5,8 +5,9 @@
 #include <kdtree++/kdtree.hpp>
 #include <functional>
 #include "common/Scene/Geometry/Mesh/MeshObject.h"
+#include "common/Rendering/Renderer/Backward/BackwardRenderer.h"
 
-class PhotonMappingRenderer : public Renderer
+class PhotonMappingRenderer : public BackwardRenderer
 {
 public:
     PhotonMappingRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class ColorSampler> sampler);
@@ -14,15 +15,13 @@ public:
     glm::vec3 ComputeSampleColor(const struct IntersectionState& intersection, const class Ray& fromCameraRay) const override;
 
     void SetNumberOfDiffusePhotons(int diffuse);
-    void SetNumberOfCasuticPhotons(int caustic);
 private:
     using PhotonKdtree = KDTree::KDTree<3, Photon, PhotonAccessor>;
     PhotonKdtree diffuseMap;
-    PhotonKdtree causticMap;
 
     int diffusePhotonNumber;
-    int causticPhotonNumber;
+    int maxPhotonBounces;
 
-    void GenericPhotonMapGeneration(PhotonKdtree& photonMap, int totalPhotons, std::function<bool(const class MeshObject&)> objectFilter);
-    void TracePhoton(const class Ray& photonRay, glm::vec3 lightIntensity, std::vector<char>& path);
+    void GenericPhotonMapGeneration(PhotonKdtree& photonMap, int totalPhotons);
+    void TracePhoton(PhotonKdtree& photonMap, Ray* photonRay, glm::vec3 lightIntensity, std::vector<char>& path, float currentIOR, int remainingBounces);
 };

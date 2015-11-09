@@ -43,9 +43,8 @@ bool Scene::Trace(class Ray* inputRay, IntersectionState* outputIntersection) co
         if (currentMaterial->IsReflective() && outputIntersection->remainingReflectionBounces > 0) {
             outputIntersection->reflectionIntersection = std::make_shared<IntersectionState>(outputIntersection->remainingReflectionBounces - 1, outputIntersection->remainingRefractionBounces);
 
-            const glm::vec3 normal = (NdR > SMALL_EPSILON) ? -1.f * outputIntersection->ComputeNormal(): outputIntersection->ComputeNormal();
-            const glm::vec3 reflectionDir = glm::reflect(inputRay->GetRayDirection(), normal);
-            Ray reflectionRay(intersectionPoint + reflectionDir * LARGE_EPSILON, reflectionDir);
+            Ray reflectionRay;
+            PerformRaySpecularReflection(reflectionRay, *inputRay, intersectionPoint, NdR, *outputIntersection);
             Trace(&reflectionRay, outputIntersection->reflectionIntersection.get());
         }
 
@@ -55,16 +54,30 @@ bool Scene::Trace(class Ray* inputRay, IntersectionState* outputIntersection) co
 
             // If we're going into the mesh, set the target IOR to be the IOR of the mesh.
             float targetIOR = (NdR < SMALL_EPSILON) ? currentMaterial->GetIOR() : 1.f;
-            const glm::vec3 refractionDir = inputRay->RefractRay(outputIntersection->ComputeNormal(), outputIntersection->currentIOR, targetIOR);
-            
-            outputIntersection->refractionIntersection->currentIOR = targetIOR;
 
-            Ray refractionRay(intersectionPoint + refractionDir * LARGE_EPSILON, refractionDir);
+            Ray refractionRay;
+            PerformRayRefraction(refractionRay, *inputRay, intersectionPoint, NdR, *outputIntersection, targetIOR);
+            outputIntersection->refractionIntersection->currentIOR = targetIOR;
             Trace(&refractionRay, outputIntersection->refractionIntersection.get());
         }
     }
 
     return didIntersect;
+}
+
+void Scene::PerformRaySpecularReflection(Ray& outputRay, const Ray& inputRay, const glm::vec3& intersectionPoint, const float NdR, const IntersectionState& state) const
+{
+    const glm::vec3 normal = (NdR > SMALL_EPSILON) ? -1.f * state.ComputeNormal() : state.ComputeNormal();
+    const glm::vec3 reflectionDir = glm::reflect(inputRay.GetRayDirection(), normal);
+    outputRay.SetRayPosition(intersectionPoint + LARGE_EPSILON * state.ComputeNormal());
+    outputRay.SetRayDirection(reflectionDir);
+}
+
+void Scene::PerformRayRefraction(Ray& outputRay, const Ray& inputRay, const glm::vec3& intersectionPoint, const float NdR, const IntersectionState& state, float& targetIOR) const
+{
+    const glm::vec3 refractionDir = inputRay.RefractRay(state.ComputeNormal(), state.currentIOR, targetIOR);
+    outputRay.SetRayPosition(intersectionPoint + LARGE_EPSILON * state.ComputeNormal());
+    outputRay.SetRayDirection(refractionDir);
 }
 
 void Scene::AddSceneObject(std::shared_ptr<SceneObject> object)
