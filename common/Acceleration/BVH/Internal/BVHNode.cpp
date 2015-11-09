@@ -50,39 +50,43 @@ void BVHNode::CreateParentNode(std::vector<std::shared_ptr<class AccelerationNod
 
 bool BVHNode::Trace(const class SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const
 {
-    if (!boundingBox.Trace(parentObject, inputRay, nullptr)) {
+    float previousIntersectionT = outputIntersection ? outputIntersection->intersectionT : 0.f;
+    if (!boundingBox.Trace(parentObject, inputRay, outputIntersection)) {
+        if (outputIntersection) {
+            outputIntersection->intersectionT = previousIntersectionT;
+        }
         return false;
     }
 
-    bool hitObject = false;
+    if (outputIntersection) {
+        outputIntersection->intersectionT = previousIntersectionT;
+    }
 
+    bool hitObject = false;
     // Merge these two branches....
     if (isLeafNode) {
         for (size_t i = 0; i < leafNodes.size(); ++i) {
-            IntersectionState temporaryIntersection;
-            hitObject |= leafNodes[i]->Trace(parentObject, inputRay, &temporaryIntersection);
-            MergeTemporaryIntersectionToOutput(temporaryIntersection, outputIntersection);
+            hitObject |= leafNodes[i]->Trace(parentObject, inputRay, outputIntersection);
         }
     } else {
         for (size_t i = 0; i < childBVHNodes.size(); ++i) {
-            IntersectionState temporaryIntersection;
-            hitObject |= childBVHNodes[i]->Trace(parentObject, inputRay, &temporaryIntersection);
-            MergeTemporaryIntersectionToOutput(temporaryIntersection, outputIntersection);
+            hitObject |= childBVHNodes[i]->Trace(parentObject, inputRay, outputIntersection);
         }
     }
-    
     return hitObject;
 }
 
-void BVHNode::MergeTemporaryIntersectionToOutput(const IntersectionState& temporaryIntersection, IntersectionState* outputIntersection) const
+std::string BVHNode::PrintContents() const
 {
-    if (!temporaryIntersection.hasIntersection || !outputIntersection) {
-        return;
+    std::ostringstream ss;
+    if (isLeafNode) {
+        for (size_t i = 0; i < leafNodes.size(); ++i) {
+            ss << leafNodes[i]->GetHumanIdentifier() << "  ";
+        }
+    } else {
+        for (size_t i = 0; i < childBVHNodes.size(); ++i) {
+            ss << childBVHNodes[i]->PrintContents() << "  ";
+        }
     }
-
-    if (outputIntersection->hasIntersection && temporaryIntersection.intersectionT - outputIntersection->intersectionT > SMALL_EPSILON) {
-        return;
-    }
-
-    *outputIntersection = temporaryIntersection;
+    return ss.str();
 }

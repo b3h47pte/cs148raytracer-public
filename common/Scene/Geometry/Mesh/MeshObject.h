@@ -11,11 +11,12 @@ public:
     virtual ~MeshObject();
     virtual void Finalize();
 
-
+    void SetName(const std::string& input);
+    std::string GetName() const { return meshName; }
     void AddPrimitive(std::shared_ptr<class PrimitiveBase> newPrimitive);
     virtual void CreateAccelerationData(AccelerationTypes perObjectType);
 
-    virtual Box GetBoundingBox() override
+    virtual Box GetBoundingBox() const override
     {
         return boundingBox;
     }
@@ -24,6 +25,8 @@ public:
     virtual const class Material* GetMaterial() const;
 
     virtual bool Trace(const class SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const override;
+
+    friend class SceneObject;
 protected:
     std::vector<std::shared_ptr<class PrimitiveBase>> elements;
     Box boundingBox;
@@ -32,4 +35,5 @@ protected:
 
 private:
     std::shared_ptr<class Material> storedMaterial;
+    std::string meshName;
 };

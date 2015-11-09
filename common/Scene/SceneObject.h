@@ -41,13 +41,21 @@ public:
 
     virtual void CreateDefaultAccelerationData();
     virtual void CreateAccelerationData(AccelerationTypes perObjectType);
+    virtual void CreateAccelerationData(AccelerationTypes perObjectType, AccelerationTypes perMeshObjectType);
 
-    virtual Box GetBoundingBox() override
+    virtual void ConfigureAccelerationStructure(std::function<void(class AccelerationStructure*)> configure);
+    virtual void ConfigureChildMeshAccelerationStructure(std::function<void(class AccelerationStructure*)> configure);
+
+    virtual Box GetBoundingBox() const override
     {
         return boundingBox;
     }
 
     virtual bool Trace(const SceneObject* parentObject, class Ray* inputRay, struct IntersectionState* outputIntersection) const override;
+
+    virtual std::string GetHumanIdentifier() const override;
+    std::string GetChildObjectNames() const;
+    void SetName(const std::string& input);
 protected:
     Box boundingBox;
     static const float MINIMUM_SCALE;
@@ -62,4 +70,7 @@ protected:
 
     class std::shared_ptr<class AccelerationStructure> acceleration;
     std::vector<std::shared_ptr<class MeshObject>> childObjects;
+
+    bool nameSet;
+    std::string objectName;
 };

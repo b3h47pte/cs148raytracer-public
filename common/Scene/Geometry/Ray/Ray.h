@@ -14,7 +14,15 @@ public:
     glm::vec3 GetRayPosition(float t) const;
 
     float GetMaxT() const;
+    void SetMaxT(float input);
+
+    void SetRayMask(uint64_t objectId);
+    bool IsObjectMasked(uint64_t objectId);
+
+    glm::vec3 RefractRay(const glm::vec3& normal, float n1, float& n2) const;
 private:
     glm::vec3 rayDirection;
     float maxT;
+
+    std::unordered_map<uint64_t, bool> traceMask;
 };

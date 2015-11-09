@@ -6,12 +6,12 @@
 struct IntersectionState
 {
     IntersectionState() :
-        remainingReflectionBounces(0), remainingRefractionBounces(0), hasIntersection(false)
+        reflectionIntersection(nullptr), remainingReflectionBounces(0), refractionIntersection(nullptr), remainingRefractionBounces(0), intersectionT(std::numeric_limits<float>::max()), hasIntersection(false), currentIOR(1.f)
     {
     }
 
     IntersectionState(int reflectionBounces, int refractionBounces) :
-        remainingReflectionBounces(reflectionBounces), remainingRefractionBounces(refractionBounces), hasIntersection(false)
+        reflectionIntersection(nullptr), remainingReflectionBounces(reflectionBounces), refractionIntersection(nullptr), remainingRefractionBounces(refractionBounces), intersectionT(std::numeric_limits<float>::max()), hasIntersection(false), currentIOR(1.f)
     {
     }
 
@@ -22,9 +22,14 @@ struct IntersectionState
         }
         remainingReflectionBounces = state->remainingReflectionBounces;
         remainingRefractionBounces = state->remainingRefractionBounces;
+        intersectionT = state->intersectionT;
+        currentIOR = state->currentIOR;
     }
 
+    std::shared_ptr<struct IntersectionState> reflectionIntersection;
     int remainingReflectionBounces;
+
+    std::shared_ptr<struct IntersectionState> refractionIntersection;
     int remainingRefractionBounces;
 
     const class PrimitiveBase* intersectedPrimitive;
@@ -32,10 +37,12 @@ struct IntersectionState
     Ray intersectionRay;
     float intersectionT;
     bool hasIntersection;
+    float currentIOR;
 
     // One for each vertex
     std::vector<float> primitiveIntersectionWeights;
 
     // Utility Functions
     glm::vec3 ComputeNormal() const;
+    glm::vec2 ComputeUV() const;
 };

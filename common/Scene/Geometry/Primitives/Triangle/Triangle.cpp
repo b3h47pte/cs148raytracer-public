@@ -54,12 +54,16 @@ bool Triangle::Trace(const SceneObject* parentObject, Ray* inputRay, Intersectio
     }
 
     if (outputIntersection) {
+        if (t - outputIntersection->intersectionT > SMALL_EPSILON) {
+            return false;
+        }
         outputIntersection->intersectionRay = *inputRay;
         outputIntersection->primitiveParent = parentObject;
         outputIntersection->intersectionT = t;
         outputIntersection->intersectedPrimitive = this;
         outputIntersection->hasIntersection = true;
 
+        outputIntersection->primitiveIntersectionWeights.clear();
         outputIntersection->primitiveIntersectionWeights.emplace_back(1.f - u - v);
         outputIntersection->primitiveIntersectionWeights.emplace_back(u);
         outputIntersection->primitiveIntersectionWeights.emplace_back(v);

@@ -6,7 +6,7 @@
 const float SceneObject::MINIMUM_SCALE = 0.01f;
 
 SceneObject::SceneObject():
-    worldToObjectMatrix(1.f), objectToWorldMatrix(1.f), position(0.f, 0.f, 0.f, 1.f), rotation(1.f, 0.f, 0.f, 0.f), scale(1.f)
+    worldToObjectMatrix(1.f), objectToWorldMatrix(1.f), position(0.f, 0.f, 0.f, 1.f), rotation(1.f, 0.f, 0.f, 0.f), scale(1.f), nameSet(false)
 {
 }
 
@@ -119,10 +119,27 @@ void SceneObject::CreateDefaultAccelerationData()
 
 void SceneObject::CreateAccelerationData(AccelerationTypes perObjectType)
 {
+    CreateAccelerationData(perObjectType, perObjectType);
+}
+
+void SceneObject::CreateAccelerationData(AccelerationTypes perObjectType, AccelerationTypes perMeshObjectType)
+{
+    for (size_t i = 0; i < childObjects.size(); ++i) {
+        childObjects[i]->CreateAccelerationData(perMeshObjectType);
+    }
     acceleration = AccelerationGenerator::CreateStructureFromType(perObjectType);
     assert(acceleration);
+}
+
+void SceneObject::ConfigureAccelerationStructure(std::function<void(class AccelerationStructure*)> configure)
+{
+    configure(acceleration.get());
+}
+
+void SceneObject::ConfigureChildMeshAccelerationStructure(std::function<void(class AccelerationStructure*)> configure)
+{
     for (size_t i = 0; i < childObjects.size(); ++i) {
-        childObjects[i]->CreateAccelerationData(perObjectType);
+        configure(childObjects[i]->acceleration.get());
     }
 }
 
@@ -133,10 +150,7 @@ void SceneObject::Finalize()
         childObjects[i]->Finalize();
         boundingBox.IncludeBox(childObjects[i]->GetBoundingBox());
     }
-
-    // scene object is in world space 
-    boundingBox.minVertex = glm::vec3(objectToWorldMatrix * glm::vec4(boundingBox.minVertex, 1.f));
-    boundingBox.maxVertex = glm::vec3(objectToWorldMatrix * glm::vec4(boundingBox.maxVertex, 1.f));
+    boundingBox = boundingBox.Transform(objectToWorldMatrix);
 
     assert(acceleration);
     acceleration->Initialize(childObjects);
@@ -144,5 +158,35 @@ void SceneObject::Finalize()
 
 bool SceneObject::Trace(const SceneObject* parentObject, Ray* inputRay, IntersectionState* outputIntersection) const
 {
-    return acceleration->Trace(this, inputRay, outputIntersection);
+    if (inputRay->IsObjectMasked(GetUniqueId())) {
+        return false;
+    }
+    bool hit = acceleration->Trace(this, inputRay, outputIntersection);
+    if (!hit) {
+        inputRay->SetRayMask(GetUniqueId());
+    }
+    return hit;
+}
+
+std::string SceneObject::GetChildObjectNames() const
+{
+    std::ostringstream oss;
+    for (size_t i = 0; i < childObjects.size(); ++i) {
+        oss << childObjects[i]->GetName() << "\t";
+    }
+    return oss.str();
+}
+
+std::string SceneObject::GetHumanIdentifier() const
+{
+    if (nameSet) {
+        return objectName;
+    }
+    return GetChildObjectNames();
+}
+
+void SceneObject::SetName(const std::string& input)
+{
+    nameSet = true;
+    objectName = input;
 }

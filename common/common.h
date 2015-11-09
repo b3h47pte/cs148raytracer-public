@@ -9,6 +9,9 @@
 #include <cmath>
 #include <array>
 #include <functional>
+#include <sstream>
+#include <stdint.h>
+#include <unordered_map>
 
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -27,6 +30,7 @@ const float SMALL_EPSILON = 1e-7f;
 
 #define STRINGIFY_HELPER(x) #x
 #define STRINGIFY(x) STRINGIFY_HELPER(x)
+#define DISABLE_ACCELERATION_CREATION_TIMER 1
 
 
 #ifdef _WIN32

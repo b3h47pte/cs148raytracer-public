@@ -46,7 +46,6 @@ void RayTracer::Run()
                 const glm::vec3 maxRange(0.5f, 0.5f, 0.f);
                 const glm::vec3 sampleOffset = (maxSamplesPerPixel == 1) ? glm::vec3(0.f, 0.f, 0.f) : minRange + (maxRange - minRange) * inputSample;
 
-
                 glm::vec2 normalizedCoordinates(static_cast<float>(c) + sampleOffset.x, static_cast<float>(r) + sampleOffset.y);
                 normalizedCoordinates /= currentResolution;
 

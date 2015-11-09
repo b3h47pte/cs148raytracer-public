@@ -1,6 +1,6 @@
 #include "common/RayTracer.h"
 
-#define ASSIGNMENT 5
+#define ASSIGNMENT 6
 #if ASSIGNMENT == 5
 #define APPLICATION Assignment5
 #include "assignment5/Assignment5.h"
@@ -15,19 +15,24 @@
 #include "assignment8/Assignment8.h"
 #endif
 
+#ifdef _WIN32
+#define WAIT_ON_EXIT 1
+#else
+#define WAIT_ON_EXIT 0
+#endif
+
 int main(int argc, char** argv)  
 {
     std::unique_ptr<APPLICATION> currentApplication = make_unique<APPLICATION>();
     RayTracer rayTracer(std::move(currentApplication));
 
-    Timer timer("Ray Tracer");
-    timer.Tick();
+    DIAGNOSTICS_TIMER(timer, "Ray Tracer");
     rayTracer.Run();
-    timer.Tock();
+    DIAGNOSTICS_END_TIMER(timer);
 
     DIAGNOSTICS_PRINT();
 
-#ifdef _WIN32
+#if defined(_WIN32) && WAIT_ON_EXIT
     int exit = 0;
     std::cin >> exit;
 #endif
