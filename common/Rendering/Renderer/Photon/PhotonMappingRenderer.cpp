@@ -9,12 +9,13 @@
 #include "common/Scene/SceneObject.h"
 #include "common/Scene/Geometry/Mesh/MeshObject.h"
 #include "common/Rendering/Material/Material.h"
+#include "glm/gtx/component_wise.hpp"
 
 #define VISUALIZE_PHOTON_MAPPING 1
 
 PhotonMappingRenderer::PhotonMappingRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class ColorSampler> sampler):
     BackwardRenderer(scene, sampler), 
-    diffusePhotonNumber(200000),
+    diffusePhotonNumber(1000000),
     maxPhotonBounces(1000)
 {
     srand(static_cast<unsigned int>(time(NULL)));
@@ -69,6 +70,10 @@ void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay,
      *        ... set photon properties ...
      *        photonMap.insert(myPhoton);
      */
+
+    assert(photonRay);
+    IntersectionState state(0, 0);
+    state.currentIOR = currentIOR;
 }
 
 glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionState& intersection, const class Ray& fromCameraRay) const
