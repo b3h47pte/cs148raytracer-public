@@ -35,10 +35,16 @@ void VoxelGrid::AddNodeToGrid(std::shared_ptr<AccelerationNode> node)
     }
 }
 
-glm::ivec3 VoxelGrid::GetVoxelForPosition(const glm::vec3& position) const
+glm::ivec3 VoxelGrid::GetVoxelForPosition(const glm::vec3& position, bool clamp) const
 {
     glm::vec3 positionDiff = (position - boundingBox.minVertex) / voxelSize;
-    return glm::ivec3(positionDiff);
+    glm::ivec3 iDiff(positionDiff);
+    if (clamp) {
+        for (int i = 0; i < 3; ++i) {
+            iDiff[i] = std::min(std::max(0, iDiff[i]), gridSize[i] - 1);
+        }
+    }
+    return iDiff;
 }
 
 bool VoxelGrid::IsInsideGrid(const glm::ivec3& index) const
@@ -70,7 +76,7 @@ bool VoxelGrid::Trace(const SceneObject* parentObject, Ray* inputRay, Intersecti
 
     // Implementation of "A Fast Voxel Traversal Algorithm for Ray Tracing" by John Amanatides and Andrew Woo
     // Link: http://www.cse.chalmers.se/edu/year/2010/course/TDA361/grid.pdf
-    glm::ivec3 currentVoxelIndex = GetVoxelForPosition(rayPos);
+    glm::ivec3 currentVoxelIndex = GetVoxelForPosition(rayPos, false);
 #if DEBUG_VOXEL_GRID
     std::cout << "Initial Voxel Position: " << glm::to_string(currentVoxelIndex) << " for " << glm::to_string(rayPos) << " going " << glm::to_string(rayDir) << std::endl;
 #endif
