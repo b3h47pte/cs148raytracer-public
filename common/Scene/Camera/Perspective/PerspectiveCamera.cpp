@@ -2,7 +2,7 @@
 #include "common/Scene/Geometry/Ray/Ray.h"
 
 PerspectiveCamera::PerspectiveCamera(float aspectRatio, float inputFov):
-    aspectRatio(aspectRatio), fov(inputFov * PI / 180.f)
+    aspectRatio(aspectRatio), fov(inputFov * PI / 180.f), zNear(0.f), zFar(std::numeric_limits<float>::max())
 {
 }
 
@@ -24,6 +24,16 @@ std::shared_ptr<Ray> PerspectiveCamera::GenerateRayForNormalizedCoordinates(glm:
     const float yOffset = -1.f * planeHeight  * (coordinate.y - 0.5f);
     const glm::vec3 targetPosition = rayOrigin + glm::vec3(GetForwardDirection()) + glm::vec3(GetRightDirection()) * xOffset + glm::vec3(GetUpDirection()) * yOffset;
 
-    const glm::vec3 rayDirection = glm::normalize(targetPosition - rayOrigin);
-    return std::make_shared<Ray>(rayOrigin, rayDirection);
+    const glm::vec3 rayDirection = glm::normalize(targetPosition - rayOrigin) + rayDirection * zNear;
+    return std::make_shared<Ray>(rayOrigin, rayDirection, zFar - zNear);
+}
+
+void PerspectiveCamera::SetZNear(float input)
+{
+    zNear = input;
+}
+
+void PerspectiveCamera::SetZFar(float input)
+{
+    zFar = input;
 }
