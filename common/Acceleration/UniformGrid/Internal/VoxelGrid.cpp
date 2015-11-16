@@ -8,7 +8,7 @@ VoxelGrid::VoxelGrid(Box inputBox, const glm::ivec3& size, const glm::vec3& inpu
     boundingBox(inputBox), gridSize(size), voxelSize(inputSize)
 {
     const float currentVolume = boundingBox.Volume();
-    boundingBox = boundingBox.Expand(LARGE_EPSILON);
+    boundingBox = boundingBox.Expand(0.001f);
     const float newVolume = boundingBox.Volume();
     voxelSize *= newVolume / currentVolume;
 }

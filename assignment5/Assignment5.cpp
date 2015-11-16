@@ -35,7 +35,8 @@ std::shared_ptr<Scene> Assignment5::CreateScene() const
     newScene->AddSceneObject(cubeSceneObject);
 
     // Lights
-    std::shared_ptr<Light> pointLight = std::make_shared<PointLight>();
+    std::shared_ptr<AreaLight> pointLight = std::make_shared<AreaLight>(glm::vec2(0.5f, 0.5f));
+    pointLight->SetSamplerAttributes(glm::vec3(2.f, 2.f, 1.f), 4);
     pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
     pointLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
     newScene->AddLight(pointLight);
