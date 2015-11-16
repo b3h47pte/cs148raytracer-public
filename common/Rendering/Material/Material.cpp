@@ -25,7 +25,7 @@ glm::vec3 Material::ComputeNonLightDependentBRDF(const class Renderer* renderer,
 {
     const glm::vec3 reflectionColor = ComputeReflection(renderer, intersection);
     const glm::vec3 transmissionColor = ComputeTransmission(renderer, intersection);
-    return reflectivity * reflectionColor + transmittance * transmissionColor;
+    return reflectivity * reflectionColor + transmittance * transmissionColor + ambient;
 }
 
 glm::vec3 Material::ComputeBRDF(const struct IntersectionState& intersection, const glm::vec3& lightColor, const class Ray& toLightRay, const class Ray& fromCameraRay, float lightAttenuation, bool computeDiffuse, bool computeSpecular) const
@@ -101,9 +101,15 @@ void Material::LoadMaterialFromAssimp(std::shared_ptr<struct aiMaterial> assimpM
     transmittance = 1.f - opacity;
 
     assimpMaterial->Get(AI_MATKEY_REFRACTI, &indexOfRefraction, nullptr);
+    assimpMaterial->Get(AI_MATKEY_COLOR_AMBIENT, glm::value_ptr(ambient), nullptr);
 }
 
 void Material::SetTexture(const std::string& id, std::shared_ptr<class Texture> inputTexture)
 {
     textureStorage[id] = std::move(inputTexture);
+}
+
+void Material::SetAmbient(const glm::vec3& input)
+{
+    ambient = input;
 }
