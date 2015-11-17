@@ -34,6 +34,7 @@ newmtl floor
   Kd 0.725 0.71 0.68
   Ks 0 0 0
   Ke 0 0 0
+  map_Kd checkerboard.png
 
 
 newmtl ceiling
@@ -43,6 +44,7 @@ newmtl ceiling
   Kd 0.725 0.71 0.68
   Ks 0     0    0
   Ke 0     0    0
+  map_Kd checkerboard.png
   
 
 newmtl backWall
