@@ -24,8 +24,8 @@ std::shared_ptr<Ray> PerspectiveCamera::GenerateRayForNormalizedCoordinates(glm:
     const float yOffset = -1.f * planeHeight  * (coordinate.y - 0.5f);
     const glm::vec3 targetPosition = rayOrigin + glm::vec3(GetForwardDirection()) + glm::vec3(GetRightDirection()) * xOffset + glm::vec3(GetUpDirection()) * yOffset;
 
-    const glm::vec3 rayDirection = glm::normalize(targetPosition - rayOrigin) + rayDirection * zNear;
-    return std::make_shared<Ray>(rayOrigin, rayDirection, zFar - zNear);
+    const glm::vec3 rayDirection = glm::normalize(targetPosition - rayOrigin);
+    return std::make_shared<Ray>(rayOrigin + rayDirection * zNear, rayDirection, zFar - zNear);
 }
 
 void PerspectiveCamera::SetZNear(float input)
