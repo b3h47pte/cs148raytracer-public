@@ -37,7 +37,7 @@ void PhotonMappingRenderer::GenericPhotonMapGeneration(PhotonKdtree& photonMap, 
         if (!currentLight) {
             continue;
         }
-        totalLightIntensity = glm::length(currentLight->GetLightColor());
+        totalLightIntensity += glm::length(currentLight->GetLightColor());
     }
 
     // Shoot photons -- number of photons for light is proportional to the light's intensity relative to the total light intensity of the scene.
