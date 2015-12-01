@@ -31,9 +31,17 @@ glm::vec4 Texture2D::Sample(const glm::vec2& coord) const
 glm::ivec2 Texture2D::HandleBorderCondition(const glm::ivec2& coord) const
 {
     // By default, do repeat across borders
-    glm::ivec2 result;
-    result.x = coord.x % texWidth;
-    result.y = coord.y % texHeight;
+    glm::ivec2 result = coord;
+    if (result.x < 0) {
+        result.x = texWidth + result.x;
+    }
+
+    if (result.y < 0) {
+        result.y = texHeight + result.y;
+    }
+
+    result.x = result.x % texWidth;
+    result.y = result.y % texHeight;
     return result;
 }
 
