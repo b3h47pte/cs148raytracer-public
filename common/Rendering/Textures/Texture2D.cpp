@@ -33,11 +33,11 @@ glm::ivec2 Texture2D::HandleBorderCondition(const glm::ivec2& coord) const
     // By default, do repeat across borders
     glm::ivec2 result = coord;
     if (result.x < 0) {
-        result.x = texWidth + result.x;
+        result.x = texWidth + result.x % texWidth;
     }
 
     if (result.y < 0) {
-        result.y = texHeight + result.y;
+        result.y = texHeight + result.y % texHeight;
     }
 
     result.x = result.x % texWidth;
