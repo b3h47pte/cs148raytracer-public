@@ -18,54 +18,26 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
     std::shared_ptr<BlinnPhongMaterial> cubeMaterial = std::make_shared<BlinnPhongMaterial>();
     cubeMaterial->SetDiffuse(glm::vec3(1.f, 1.f, 1.f));
     cubeMaterial->SetSpecular(glm::vec3(0.6f, 0.6f, 0.6f), 40.f);
-    cubeMaterial->SetReflectivity(0.3f);
 
     // Objects
     std::vector<std::shared_ptr<aiMaterial>> loadedMaterials;
-    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Assignment6-Alt.obj", &loadedMaterials);
+    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Original.obj", &loadedMaterials);
     for (size_t i = 0; i < cubeObjects.size(); ++i) {
         std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
         materialCopy->LoadMaterialFromAssimp(loadedMaterials[i]);
         cubeObjects[i]->SetMaterial(materialCopy);
-
-        std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
-        cubeSceneObject->AddMeshObject(cubeObjects[i]);
-        cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
-        cubeSceneObject->CreateAccelerationData(AccelerationTypes::BVH);
-
-        cubeSceneObject->ConfigureAccelerationStructure([](AccelerationStructure* genericAccelerator) {
-            BVHAcceleration* accelerator = dynamic_cast<BVHAcceleration*>(genericAccelerator);
-            accelerator->SetMaximumChildren(2);
-            accelerator->SetNodesOnLeaves(2);
-        });
-
-        cubeSceneObject->ConfigureChildMeshAccelerationStructure([](AccelerationStructure* genericAccelerator) {
-            BVHAcceleration* accelerator = dynamic_cast<BVHAcceleration*>(genericAccelerator);
-            accelerator->SetMaximumChildren(2);
-            accelerator->SetNodesOnLeaves(2);
-        });
-
-
-        newScene->AddSceneObject(cubeSceneObject);
     }
 
+    std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
+    cubeSceneObject->AddMeshObject(cubeObjects);
+    cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
+    cubeSceneObject->CreateAccelerationData(AccelerationTypes::UNIFORM_GRID);
+    newScene->AddSceneObject(cubeSceneObject);
+
     // Lights
-    std::shared_ptr<Light> pointLight = std::make_shared<PointLight>();
+    std::shared_ptr<PointLight> pointLight = std::make_shared<PointLight>();
     pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
     pointLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
-
-// Assignment 6 Part 1 TODO: Change the '1' here.
-#define ACCELERATION_TYPE 1
-#if ACCELERATION_TYPE == 0
-    newScene->GenerateAccelerationData(AccelerationTypes::NONE);
-#elif ACCELERATION_TYPE == 1
-    newScene->GenerateAccelerationData(AccelerationTypes::BVH);
-#else
-    UniformGridAcceleration* accelerator = dynamic_cast<UniformGridAcceleration*>(newScene->GenerateAccelerationData(AccelerationTypes::UNIFORM_GRID));
-    assert(accelerator);
-    // Assignment 6 Part 2 TODO: Change the glm::ivec3(10, 10, 10) here.
-    accelerator->SetSuggestedGridSize(glm::ivec3(10, 10, 10));
-#endif    
     newScene->AddLight(pointLight);
 
     return newScene;
@@ -74,8 +46,18 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
 std::shared_ptr<ColorSampler> Assignment6::CreateSampler() const
 {
     std::shared_ptr<JitterColorSampler> jitter = std::make_shared<JitterColorSampler>();
+    // ASSIGNMENT 6 TODO: Change the grid size to be glm::ivec3(X, Y, 1).
     jitter->SetGridSize(glm::ivec3(1, 1, 1));
+
+    std::shared_ptr<SimpleAdaptiveSampler> sampler = std::make_shared<SimpleAdaptiveSampler>();
+    sampler->SetInternalSampler(jitter);
+
+    // ASSIGNMENT 6 TODO: Change the '1.f' in '1.f * SMALL_EPSILON' here to be higher and see what your results are. (Part 3)
+    sampler->SetEarlyExitParameters(1.f * SMALL_EPSILON, 4);
+
+    // ASSIGNMENT 6 TODO: Comment out 'return jitter;' to use the adaptive sampler. (Part 2)
     return jitter;
+    return sampler;
 }
 
 std::shared_ptr<class Renderer> Assignment6::CreateRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<ColorSampler> sampler) const
@@ -85,6 +67,7 @@ std::shared_ptr<class Renderer> Assignment6::CreateRenderer(std::shared_ptr<Scen
 
 int Assignment6::GetSamplesPerPixel() const
 {
+    // ASSIGNMENT 6 TODO: Change the '1' here to increase the maximum number of samples used per pixel. (Part 1).
     return 1;
 }
 
@@ -95,12 +78,12 @@ bool Assignment6::NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleInd
 
 int Assignment6::GetMaxReflectionBounces() const
 {
-    return 2;
+    return 0;
 }
 
 int Assignment6::GetMaxRefractionBounces() const
 {
-    return 4;
+    return 0;
 }
 
 glm::vec2 Assignment6::GetImageOutputResolution() const
