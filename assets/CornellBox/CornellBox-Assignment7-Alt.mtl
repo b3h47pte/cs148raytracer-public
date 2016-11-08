@@ -1,0 +1,261 @@
+# Blender MTL File: 'None'
+# Material Count: 25
+
+newmtl backWall
+Ns 9.803922
+Kd 0.725000 0.710000 0.680000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl ceiling
+Ns 9.803922
+Kd 0.725000 0.710000 0.680000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl floor
+Ns 9.803922
+Kd 0.725000 0.710000 0.680000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl initialShadingGroup
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.001
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.002
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.003
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.004
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.005
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.006
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.007
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.008
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.009
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.010
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.011
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.012
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.013
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.014
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.015
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl initialShadingGroup.016
+Ns 96.078431
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd brick/bricktexture.jpg
+map_Ks brick/bricktexture.jpg
+
+newmtl leftWall
+Ns 9.803922
+Kd 0.630000 0.065000 0.050000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl light
+Ns 9.803922
+Kd 0.780000 0.780000 0.780000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl rightWall
+Ns 9.803922
+Kd 0.140000 0.450000 0.091000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl shortBox
+Ns 9.803922
+Kd 0.725000 0.710000 0.680000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl tallBox
+Ns 9.803922
+Kd 0.725000 0.710000 0.680000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
