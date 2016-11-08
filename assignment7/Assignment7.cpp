@@ -10,6 +10,13 @@ std::shared_ptr<Camera> Assignment7::CreateCamera() const
     return camera;
 }
 
+
+// Assignment 7 Part 1 TODO: Change the '1' here.
+// 0 -- Naive.
+// 1 -- BVH.
+// 2 -- Grid.
+#define ACCELERATION_TYPE 1
+
 std::shared_ptr<Scene> Assignment7::CreateScene() const
 {
     std::shared_ptr<Scene> newScene = std::make_shared<Scene>();
@@ -31,8 +38,8 @@ std::shared_ptr<Scene> Assignment7::CreateScene() const
         std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
         cubeSceneObject->AddMeshObject(cubeObjects[i]);
         cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
-        cubeSceneObject->CreateAccelerationData(AccelerationTypes::BVH);
 
+        cubeSceneObject->CreateAccelerationData(AccelerationTypes::BVH);
         cubeSceneObject->ConfigureAccelerationStructure([](AccelerationStructure* genericAccelerator) {
             BVHAcceleration* accelerator = dynamic_cast<BVHAcceleration*>(genericAccelerator);
             accelerator->SetMaximumChildren(2);
@@ -44,8 +51,6 @@ std::shared_ptr<Scene> Assignment7::CreateScene() const
             accelerator->SetMaximumChildren(2);
             accelerator->SetNodesOnLeaves(2);
         });
-
-
         newScene->AddSceneObject(cubeSceneObject);
     }
 
@@ -54,8 +59,6 @@ std::shared_ptr<Scene> Assignment7::CreateScene() const
     pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
     pointLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
 
-// Assignment 7 Part 1 TODO: Change the '1' here.
-#define ACCELERATION_TYPE 1
 #if ACCELERATION_TYPE == 0
     newScene->GenerateAccelerationData(AccelerationTypes::NONE);
 #elif ACCELERATION_TYPE == 1
