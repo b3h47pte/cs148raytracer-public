@@ -63,7 +63,7 @@ void PhotonMappingRenderer::GenericPhotonMapGeneration(PhotonKdtree& photonMap, 
 void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay, glm::vec3 lightIntensity, std::vector<char>& path, float currentIOR, int remainingBounces)
 {
     /*
-     * Assignment 7 TODO: Trace a photon into the scene and make it bounce.
+     * Assignment 8 TODO: Trace a photon into the scene and make it bounce.
      *    
      *    How to insert a 'Photon' struct into the photon map.
      *        Photon myPhoton;

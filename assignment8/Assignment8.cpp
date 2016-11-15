@@ -21,7 +21,7 @@ std::shared_ptr<Scene> Assignment8::CreateScene() const
 
     // Objects
     std::vector<std::shared_ptr<aiMaterial>> loadedMaterials;
-    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Assignment8.obj", &loadedMaterials);
+    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Photon.obj", &loadedMaterials);
     for (size_t i = 0; i < cubeObjects.size(); ++i) {
         std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
         materialCopy->LoadMaterialFromAssimp(loadedMaterials[i]);
@@ -35,8 +35,8 @@ std::shared_ptr<Scene> Assignment8::CreateScene() const
     newScene->AddSceneObject(cubeSceneObject);
 
     // Lights
-    std::shared_ptr<PointLight> pointLight = std::make_shared<PointLight>();
-    pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
+    std::shared_ptr<Light> pointLight = std::make_shared<PointLight>();
+    pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.77640f));
     pointLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
     newScene->AddLight(pointLight);
 
@@ -52,13 +52,12 @@ std::shared_ptr<ColorSampler> Assignment8::CreateSampler() const
 
 std::shared_ptr<class Renderer> Assignment8::CreateRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<ColorSampler> sampler) const
 {
-    return std::make_shared<BackwardRenderer>(scene, sampler);
+    return std::make_shared<PhotonMappingRenderer>(scene, sampler);
 }
 
 int Assignment8::GetSamplesPerPixel() const
 {
-    // ASSIGNMENT 5 TODO: Change the '1' here to increase the maximum number of samples used per pixel. (Part 1).
-    return 1; 
+    return 1;
 }
 
 bool Assignment8::NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleIndex)
