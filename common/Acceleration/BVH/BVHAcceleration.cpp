@@ -18,10 +18,9 @@ void BVHAcceleration::InternalInitialization()
 #if !DISABLE_ACCELERATION_CREATION_TIMER
     DIAGNOSTICS_TIMER(timer, "BVH Creation Time");
 #endif
-    // maximum children shouldn't be less than nodes on leaves...
-    if (maximumChildren < nodesOnLeaves) {
-        std::cerr << "WARNING: Maximum children is less than nodes on leaves. Setting it equal." << std::endl;
-        maximumChildren = nodesOnLeaves;
+    // nodes on leaves shouldn't be less than maximum children...
+    if (nodesOnLeaves < maximumChildren) {
+        nodesOnLeaves = maximumChildren;
     }
 
     rootNode = std::make_shared<BVHNode>(nodes, maximumChildren, nodesOnLeaves);
